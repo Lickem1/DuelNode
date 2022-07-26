@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="duelnode-lobby:jar">
+    <output-path>$USER_HOME$/Desktop</output-path>
+    <root id="archive" name="duelnode-lobby.jar">
+      <element id="module-output" name="duelnode-lobby" />
+      <element id="module-output" name="duelnode-api" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
