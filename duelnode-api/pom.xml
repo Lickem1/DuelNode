@@ -33,6 +33,13 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/proj/libs/CodecSpigot.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>tk.lickem</groupId>
+            <artifactId>WorldEdit</artifactId>
+            <version>1.12.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/proj/libs/WorldEdit.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>
