@@ -6,6 +6,7 @@ import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.duelnode.lobby.data.world.chunk.NMSChunk;
@@ -20,6 +21,8 @@ public class Plugin extends JavaPlugin {
     @Getter private static Plugin instance;
     private final Gson gson = new GsonBuilder().create();
 
+    private Location spawnLocation;
+
     public void onEnable() {
         instance = this;
 
@@ -30,7 +33,6 @@ public class Plugin extends JavaPlugin {
 
         try {
             World world =Bukkit.getServer().getWorld("world");
-            world.setSpawnLocation(0, 71,0);
             File file = new File(Plugin.getInstance().getDataFolder(), "spawn.schematic");
             WorldEditUtil worldEditUtil = DynamicManager.get(WorldEditUtil.class);
 
@@ -42,6 +44,8 @@ public class Plugin extends JavaPlugin {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        spawnLocation = new Location(Bukkit.getServer().getWorld("world"), 0.500, 71, 0.500, -90, 0);
 
     }
 

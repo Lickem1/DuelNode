@@ -13,16 +13,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import tk.duelnode.lobby.Plugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class ItemBuilder implements Listener {
 
@@ -98,6 +96,10 @@ public class ItemBuilder implements Listener {
 
     public ItemStack build() {
         net.minecraft.server.v1_12_R1.ItemStack itemNms = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound uid = new NBTTagCompound();
+        uid.setString("uid", UUID.randomUUID().toString());
+        tags.add(uid);
+
         for(NBTTagCompound nbt : tags) {
             for(String s : nbt.c()) {
                 itemNms.getTag().set(s, nbt.get(s));
@@ -116,7 +118,7 @@ public class ItemBuilder implements Listener {
             return;
 
         if(e.getItem().equals(itemStack)) {
-            if(itemEvent != null) {
+            if(itemEvent != null && e.getHand() == EquipmentSlot.HAND) {
                 e.setCancelled(true);
                 itemEvent.e(e.getPlayer());
             }

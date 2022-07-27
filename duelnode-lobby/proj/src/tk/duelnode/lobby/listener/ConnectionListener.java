@@ -1,11 +1,14 @@
 package tk.duelnode.lobby.listener;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
+import tk.duelnode.lobby.Plugin;
 import tk.duelnode.lobby.data.packet.ClassType;
+import tk.duelnode.lobby.data.packet.PacketInjector;
+import tk.duelnode.lobby.data.player.PlayerData;
+import tk.duelnode.lobby.manager.DynamicManager;
+import tk.duelnode.lobby.manager.PlayerDataManager;
 import tk.duelnode.lobby.manager.dynamic.DynamicListener;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 
@@ -15,7 +18,12 @@ public class ConnectionListener extends DynamicListener {
     @EventHandler
     public void join(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        Location spawn = new Location(Bukkit.getWorld("world"), 0, 71, 0, -90, 0);
-        p.teleport(spawn);
+        PlayerData data = DynamicManager.get(PlayerDataManager.class).getProfile(p);
+        data.setPlayer(e.getPlayer());
+        DynamicManager.get(PacketInjector.class).injectHandler(e.getPlayer()); // packet injector
+
+
+        p.teleport(Plugin.getInstance().getSpawnLocation());
+        data.createLobbyPlayer();
     }
 }

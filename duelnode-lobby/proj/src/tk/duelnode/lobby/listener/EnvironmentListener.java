@@ -1,7 +1,6 @@
 package tk.duelnode.lobby.listener;
 
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -23,9 +22,7 @@ public class EnvironmentListener extends DynamicListener {
 
     @EventHandler
     public void root(PlayerInteractEvent e) {
-        if (e.getAction() == Action.PHYSICAL) {
-            e.setCancelled(true);
-        }
+        e.setCancelled(true);
     }
 
     @EventHandler

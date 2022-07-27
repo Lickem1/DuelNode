@@ -24,6 +24,7 @@ public class AirChunkProvider extends ChunkProviderServer {
 
             this.chunks.put(ChunkCoordIntPair.a(i, j), chunk);
             chunk.addEntities();
+            chunk.initLighting();
             chunk.loadNearby(this, this.chunkGenerator, true);
         }
 

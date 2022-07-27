@@ -1,1 +1,4 @@
 tk\duelnode\api\API.class
+tk\duelnode\api\util\redis\RedisListener.class
+tk\duelnode\api\util\redis\RedisManager.class
+tk\duelnode\api\util\redis\Message.class

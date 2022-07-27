@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import tk.duelnode.lobby.Plugin;
@@ -12,12 +13,13 @@ import tk.duelnode.lobby.data.packet.PacketInjector;
 import tk.duelnode.lobby.data.player.PlayerData;
 import tk.duelnode.lobby.manager.dynamic.DynamicListener;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
+import tk.duelnode.lobby.manager.dynamic.annotations.PreInit;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
-@Init(classType = ClassType.CONSTRUCT)
+@PreInit
 public class PlayerDataManager extends DynamicListener {
 
     public PlayerDataManager() {
@@ -52,11 +54,8 @@ public class PlayerDataManager extends DynamicListener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void join(PlayerJoinEvent e) {
-        createData(e.getPlayer());
-        getProfile(e.getPlayer()).setPlayer(e.getPlayer());
-
-        DynamicManager.get(PacketInjector.class).injectHandler(e.getPlayer()); // packet injector
+    public void join(AsyncPlayerPreLoginEvent e) {
+        createData(e.getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
