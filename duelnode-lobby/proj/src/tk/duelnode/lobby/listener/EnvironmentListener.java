@@ -5,6 +5,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import tk.duelnode.lobby.data.packet.ClassType;
 import tk.duelnode.lobby.manager.dynamic.DynamicListener;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
@@ -33,5 +34,10 @@ public class EnvironmentListener extends DynamicListener {
     @EventHandler
     public void bPlace(BlockPlaceEvent e) {
         e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void weatherChange(WeatherChangeEvent e) {
+        if(e.toWeatherState()) e.setCancelled(true);
     }
 }

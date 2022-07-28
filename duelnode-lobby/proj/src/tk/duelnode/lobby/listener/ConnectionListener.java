@@ -1,5 +1,6 @@
 package tk.duelnode.lobby.listener;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -25,5 +26,8 @@ public class ConnectionListener extends DynamicListener {
 
         p.teleport(Plugin.getInstance().getSpawnLocation());
         data.createLobbyPlayer();
+
+        p.sendTitle(ChatColor.AQUA + "Node-Lobby " + ChatColor.GRAY + "(ALPHA)", ChatColor.GRAY + "Contact Lickem for bugs");
+
     }
 }

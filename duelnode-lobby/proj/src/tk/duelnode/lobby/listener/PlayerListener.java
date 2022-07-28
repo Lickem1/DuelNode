@@ -1,5 +1,7 @@
 package tk.duelnode.lobby.listener;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -7,6 +9,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -60,7 +63,12 @@ public class PlayerListener extends DynamicListener {
         switch (e.getItem().getType()) {
 
             case DIAMOND_SWORD:
-                data.queueItems();
+
+                if(Bukkit.getServer().getOnlinePlayers().size() >= 2) {
+                    p.sendMessage(ChatColor.GREEN + "» " + ChatColor.GRAY + "You have joined the queue, please allow a few seconds for matchmaking!");
+                    data.queueItems();
+                } else p.sendMessage(ChatColor.RED + "» " + ChatColor.GRAY + "Unable to join queue when no other players are online!");
+
                 break;
 
             case RED_ROSE:
@@ -68,11 +76,22 @@ public class PlayerListener extends DynamicListener {
                 break;
 
             case REDSTONE:
+                p.sendMessage(ChatColor.RED + "» " + ChatColor.GRAY + "You have left the queue!");
                 data.createLobbyPlayer();
                 break;
 
             default: break;
         }
 
+    }
+
+    @EventHandler
+    public void chat(AsyncPlayerChatEvent e) {
+        Player p = e.getPlayer();
+        String format = ChatColor.GRAY + "[%s"+ ChatColor.GRAY + "] %s" + p.getName() + ChatColor.GRAY + ": " + ChatColor.WHITE + e.getMessage();
+
+        if(p.getName().equalsIgnoreCase("Lickem")) format = String.format(format, ChatColor.YELLOW + "Dev", ChatColor.GOLD);
+        else format = String.format(format, ChatColor.WHITE + "Member", ChatColor.GRAY);
+        e.setFormat(format);
     }
 }

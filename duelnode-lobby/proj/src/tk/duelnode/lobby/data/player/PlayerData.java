@@ -26,7 +26,7 @@ public class PlayerData {
         if(player == null) return;
 
         ItemStack queue = new ItemBuilder(Material.DIAMOND_SWORD, 1,0).setName("&7» &bClick to join queue &7«").build();
-        ItemStack info = new ItemBuilder(Material.NETHER_STAR, 1,0).setName("&7» &bInfo &7«").build();
+        ItemStack info = new ItemBuilder(Material.BOOK, 1,0).setName("&7» &bInfo &7«").build();
         ItemStack disconnect = new ItemBuilder(Material.RED_ROSE, 1,1).setName("&7» &cDisconnect &7«").build();
 
         player.getInventory().setItem(1, info);

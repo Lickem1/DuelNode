@@ -9,8 +9,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
+import tk.duelnode.api.util.plasma.Plasma;
 import tk.duelnode.lobby.data.world.chunk.NMSChunk;
 import tk.duelnode.lobby.manager.DynamicManager;
+import tk.duelnode.lobby.manager.ScoreboardAdapter;
 import tk.duelnode.lobby.util.WorldEditUtil;
 
 import java.io.File;
@@ -25,7 +27,7 @@ public class Plugin extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
-
+        new Plasma(this, new ScoreboardAdapter());
         DynamicManager.init(this.getClassLoader());
 
 

@@ -22,7 +22,7 @@ public class PacketInjector {
             Channel channel = playerConnection.networkManager.channel;
             ChannelPipeline pipeline = channel.pipeline();
 
-            pipeline.addBefore("packet_handler", "whole-packethandler", new PacketHandler(player));
+            pipeline.addBefore("packet_handler", "dn-packethandler", new PacketHandler(player));
         });
     }
 
@@ -35,7 +35,7 @@ public class PacketInjector {
                 ChannelPipeline pipeline = channel.pipeline();
 
                 channel.eventLoop().execute(() -> {
-                    if (pipeline.get("whole-packethandler") != null) pipeline.remove("whole-packethandler");
+                    if (pipeline.get("dn-packethandler") != null) pipeline.remove("whole-packethandler");
                 });
             }
         });
