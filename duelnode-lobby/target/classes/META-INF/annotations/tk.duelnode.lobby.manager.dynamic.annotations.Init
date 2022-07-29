@@ -3,6 +3,7 @@ tk.duelnode.lobby.data.menu.info.InfoMenu
 tk.duelnode.lobby.data.menu.info.UpdateLogMenu
 tk.duelnode.lobby.data.packet.PacketInjector
 tk.duelnode.lobby.data.player.VoidSpawnHandler
+tk.duelnode.lobby.data.queue.QueueManager
 tk.duelnode.lobby.data.world.WorldListener
 tk.duelnode.lobby.listener.ConnectionListener
 tk.duelnode.lobby.listener.EnvironmentListener

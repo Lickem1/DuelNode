@@ -34,7 +34,7 @@ public class Plugin extends JavaPlugin {
         for(World worlds : getServer().getWorlds()) new NMSChunk(worlds);
 
         try {
-            World world =Bukkit.getServer().getWorld("world");
+            World world = Bukkit.getServer().getWorld("world");
             File file = new File(Plugin.getInstance().getDataFolder(), "spawn.schematic");
             WorldEditUtil worldEditUtil = DynamicManager.get(WorldEditUtil.class);
 

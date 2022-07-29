@@ -3,6 +3,8 @@ package tk.duelnode.lobby.manager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import tk.duelnode.api.util.plasma.PlasmaAdapter;
+import tk.duelnode.lobby.data.player.PlayerData;
+import tk.duelnode.lobby.data.queue.QueueManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,15 +49,22 @@ public class ScoreboardAdapter implements PlasmaAdapter {
 
     @Override
     public List<String> getLines(Player player) {
+        QueueManager queue = DynamicManager.get(QueueManager.class);
+        PlayerData data = DynamicManager.get(PlayerDataManager.class).getProfile(player);
         List<String> s = new ArrayList<>();
 
         s.add("&7&m------------------");
-        s.add("&6Info &7(" + player.getName() + ")");
-        s.add(" &6Ping&7: &f" + player.spigot().getPing() + "ms");
-        s.add(" &6Balance&7: &a$&f0.0");
+        s.add("&eInfo &7(" + player.getName() + ")");
+        s.add("&f *&6 Ping&7: &f" + player.spigot().getPing() + "ms");
+        s.add("&f *&6 Balance&7: &a$&f0.0");
         s.add("");
-        s.add("&6Queueing:&f 0");
-        s.add("&6Players: &f"+ Bukkit.getServer().getOnlinePlayers().size());
+        if(data.isInQueue()) {
+            s.add("&eQueueing &7(Default Kit)");
+            s.add("&f *&6 Time: &f"+ data.getCurrent_Queue().getTimeInQueue());
+        } else {
+            s.add("&6Queueing:&f " + queue.getCurrentQueuedPlayers());
+            s.add("&6Players: &f"+ Bukkit.getServer().getOnlinePlayers().size());
+        }
         s.add("");
         s.add("&7&oContact Lickem#9444");
         s.add("&7&m------------------");

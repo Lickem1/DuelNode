@@ -14,6 +14,7 @@ tk\duelnode\lobby\data\player\PlayerData.class
 tk\duelnode\lobby\data\menu\GameServerMenu.class
 tk\duelnode\lobby\data\packet\ClassType.class
 tk\duelnode\lobby\data\packet\PacketState.class
+tk\duelnode\lobby\data\queue\QueueManager.class
 META-INF\annotations\tk.duelnode.lobby.manager.dynamic.annotations.PreInit
 tk\duelnode\lobby\util\WorldEditUtil.class
 tk\duelnode\lobby\util\menu\MenuBuilder.class
@@ -26,6 +27,7 @@ tk\duelnode\lobby\listener\EnvironmentListener.class
 tk\duelnode\lobby\util\itembuilder\ItemEvent.class
 tk\duelnode\lobby\util\menu\MenuHolder.class
 tk\duelnode\lobby\data\packet\PacketHandler.class
+tk\duelnode\lobby\data\queue\Queue.class
 tk\duelnode\lobby\util\itembuilder\ItemBuilder.class
 tk\duelnode\lobby\Plugin.class
 tk\duelnode\lobby\manager\DynamicManager.class

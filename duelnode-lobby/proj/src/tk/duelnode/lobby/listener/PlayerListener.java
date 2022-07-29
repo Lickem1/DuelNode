@@ -17,6 +17,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import tk.duelnode.lobby.data.menu.info.InfoMenu;
 import tk.duelnode.lobby.data.packet.ClassType;
 import tk.duelnode.lobby.data.player.PlayerData;
+import tk.duelnode.lobby.data.queue.QueueManager;
 import tk.duelnode.lobby.manager.DynamicManager;
 import tk.duelnode.lobby.manager.PlayerDataManager;
 import tk.duelnode.lobby.manager.dynamic.DynamicListener;
@@ -60,15 +61,20 @@ public class PlayerListener extends DynamicListener {
             return;
         Player p = e.getPlayer();
         PlayerData data = DynamicManager.get(PlayerDataManager.class).getProfile(p);
+        QueueManager queueManager = DynamicManager.get(QueueManager.class);
 
         switch (e.getItem().getType()) {
 
             case DIAMOND_SWORD:
 
-                if(Bukkit.getServer().getOnlinePlayers().size() >= 2) {
-                    p.sendMessage(ChatColor.GREEN + "» " + ChatColor.GRAY + "You have joined the queue, please allow a few seconds for matchmaking!");
-                    data.queueItems();
-                } else p.sendMessage(ChatColor.RED + "» " + ChatColor.GRAY + "Unable to join queue when no other players are online!");
+                //if(Bukkit.getServer().getOnlinePlayers().size() >= 2) {
+                //    p.sendMessage(ChatColor.GREEN + "» " + ChatColor.GRAY + "You have joined the queue, please allow a few seconds for matchmaking!");
+                //    data.queueItems();
+                //} else p.sendMessage(ChatColor.RED + "» " + ChatColor.GRAY + "Unable to join queue when no other players are online!");
+
+                p.sendMessage(ChatColor.GREEN + "» " + ChatColor.GRAY + "You have joined the queue, please allow a few seconds for matchmaking!");
+                data.queueItems();
+                queueManager.addToQueue(data);
 
                 break;
 
@@ -83,6 +89,7 @@ public class PlayerListener extends DynamicListener {
             case REDSTONE:
                 p.sendMessage(ChatColor.RED + "» " + ChatColor.GRAY + "You have left the queue!");
                 data.createLobbyPlayer();
+                queueManager.removeFromQueue(data);
                 break;
 
             default: break;

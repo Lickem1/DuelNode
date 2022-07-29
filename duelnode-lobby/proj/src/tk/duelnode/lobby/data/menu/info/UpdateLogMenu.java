@@ -46,7 +46,7 @@ public class UpdateLogMenu {
 
         MenuBuilder menu = new MenuBuilder(54, "Update Logs #1");
         fillGlass(menu);
-        for (int i = 0; i < items.size(); i++) {
+        for (ItemStack item : items) {
             if (menu.get().firstEmpty() == 34) {
                 menus.add(menu);
                 int index = menus.indexOf(menu) + 2;
@@ -54,7 +54,7 @@ public class UpdateLogMenu {
                 fillGlass(menu);
             }
 
-            menu.add(items.get(i));
+            menu.add(item);
         }
         menus.add(menu);
 
@@ -124,6 +124,14 @@ public class UpdateLogMenu {
                 "&bCommit ID:&f b15205db26f7c0c92c98df2486f9cdaef11b114f",
                 "&7AGAIN, some more work done on the lobby portion, hopefully this upcoming",
                 "&7commit will be my last one on the design on lobby, now we will start implementing",
+                "&7cross-server communication and duel creation (See gameserver for more)"
+        }),
+
+        LOG_5("Log #5", "Jul 29, 2022 @ 1:30AM EST", new String[]{
+                "&bCommit ID:&f 168a694a90595a27c378490e7ca3b5f02c733424",
+                "&bCommit ID:&f 094e615e8aae28657028d6f8ff3e3cf00d5c01f7",
+                "&7AGAIN, some more work done on the lobby portion, making it look pretty",
+                "&7Wow we should be able to start implementing",
                 "&7cross-server communication and duel creation (See gameserver for more)"
         });
 

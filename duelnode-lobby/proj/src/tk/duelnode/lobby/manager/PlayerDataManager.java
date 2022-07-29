@@ -11,6 +11,7 @@ import tk.duelnode.lobby.Plugin;
 import tk.duelnode.lobby.data.packet.ClassType;
 import tk.duelnode.lobby.data.packet.PacketInjector;
 import tk.duelnode.lobby.data.player.PlayerData;
+import tk.duelnode.lobby.data.queue.QueueManager;
 import tk.duelnode.lobby.manager.dynamic.DynamicListener;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 import tk.duelnode.lobby.manager.dynamic.annotations.PreInit;
@@ -60,6 +61,10 @@ public class PlayerDataManager extends DynamicListener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void leave(PlayerQuitEvent e) {
+        PlayerData data = getProfile(e.getPlayer());
+        QueueManager queueManager = DynamicManager.get(QueueManager.class);
+
+        if(data != null && data.isInQueue()) queueManager.removeFromQueue(data);
         delete(e.getPlayer());
 
         DynamicManager.get(PacketInjector.class).ejectHandler(e.getPlayer()); // packet injector

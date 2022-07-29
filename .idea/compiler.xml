@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="duelnode-lobby" />
+        <module name="duelnode-gameserver" />
         <module name="duelnode-api" />
       </profile>
     </annotationProcessing>

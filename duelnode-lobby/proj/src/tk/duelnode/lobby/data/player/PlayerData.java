@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import tk.duelnode.lobby.data.queue.Queue;
 import tk.duelnode.lobby.util.itembuilder.ItemBuilder;
 
 import java.util.UUID;
@@ -17,6 +18,7 @@ public class PlayerData {
     @Setter(AccessLevel.NONE)
     private final UUID UUID;
     private Player player;
+    private Queue current_Queue;
 
     public PlayerData(UUID uuid) {
         this.UUID = uuid;
@@ -41,6 +43,9 @@ public class PlayerData {
         ItemStack leaveQueue = new ItemBuilder(Material.REDSTONE, 1, 0).setName("&7» &cClick to leave queue &7«").build();
         player.getInventory().setItem(4, leaveQueue);
         player.updateInventory();
+    }
 
+    public boolean isInQueue() {
+        return (current_Queue != null);
     }
 }

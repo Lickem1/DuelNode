@@ -11,6 +11,7 @@
     <modules>
         <module>duelnode-lobby</module>
         <module>duelnode-api</module>
+        <module>duelnode-gameserver</module>
     </modules>
 
     <properties>

@@ -1,0 +1,4 @@
+name: DuelNode-GameServer
+version: 1.0.0
+author: Lickem
+main: tk.duelnode.gameserver.GameServer
