@@ -1,11 +1,13 @@
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\plasma\PlasmaBoard.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\plasma\PlasmaListener.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\plasma\PlasmaBoardEntry.java
-D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\plasma\PlasmaStyle.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\redis\RedisManager.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\plasma\PlasmaAdapter.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\API.java
-D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\redis\RedisListener.java
-D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\plasma\Plasma.java
+D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\game\sent\GameData.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\plasma\PlasmaThread.java
+D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\plasma\PlasmaStyle.java
+D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\redis\RedisListener.java
+D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\game\sent\GameType.java
+D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\plasma\Plasma.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\redis\Message.java

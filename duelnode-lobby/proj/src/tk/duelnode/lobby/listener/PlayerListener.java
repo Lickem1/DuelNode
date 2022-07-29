@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import tk.duelnode.lobby.data.menu.info.InfoMenu;
 import tk.duelnode.lobby.data.packet.ClassType;
 import tk.duelnode.lobby.data.player.PlayerData;
 import tk.duelnode.lobby.manager.DynamicManager;
@@ -73,6 +74,10 @@ public class PlayerListener extends DynamicListener {
 
             case RED_ROSE:
                 p.kickPlayer("Disconnected");
+                break;
+
+            case BOOK:
+                DynamicManager.get(InfoMenu.class).open(p);
                 break;
 
             case REDSTONE:

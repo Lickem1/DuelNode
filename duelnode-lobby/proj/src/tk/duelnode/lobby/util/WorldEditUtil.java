@@ -25,6 +25,7 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
+import tk.duelnode.api.API;
 import tk.duelnode.lobby.Plugin;
 import tk.duelnode.lobby.data.packet.ClassType;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
@@ -105,7 +106,7 @@ public class WorldEditUtil {
 
     private String stripText(String json) {
         if (json == EMPTY) return EMPTY;
-        JsonObject object = Plugin.getInstance().getGson().fromJson(json, JsonObject.class);
+        JsonObject object = API.getGson().fromJson(json, JsonObject.class);
         StringBuilder builder = new StringBuilder();
         builder.append(object.get("text").getAsString());
         if (object.get("extra") != null)

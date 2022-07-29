@@ -1,11 +1,13 @@
-tk\duelnode\api\util\plasma\PlasmaBoardEntry.class
+tk\duelnode\api\game\sent\GameType.class
 tk\duelnode\api\util\redis\RedisListener.class
+tk\duelnode\api\game\sent\GameData.class
+tk\duelnode\api\API.class
+tk\duelnode\api\util\plasma\PlasmaBoard.class
+tk\duelnode\api\util\plasma\Plasma.class
+tk\duelnode\api\util\plasma\PlasmaBoardEntry.class
 tk\duelnode\api\util\plasma\PlasmaStyle.class
 tk\duelnode\api\util\redis\RedisManager.class
-tk\duelnode\api\API.class
 tk\duelnode\api\util\plasma\PlasmaAdapter.class
 tk\duelnode\api\util\plasma\PlasmaListener.class
 tk\duelnode\api\util\plasma\PlasmaThread.class
 tk\duelnode\api\util\redis\Message.class
-tk\duelnode\api\util\plasma\PlasmaBoard.class
-tk\duelnode\api\util\plasma\Plasma.class

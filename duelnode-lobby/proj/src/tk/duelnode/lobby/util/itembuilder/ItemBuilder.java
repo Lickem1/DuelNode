@@ -1,5 +1,7 @@
 package tk.duelnode.lobby.util.itembuilder;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
@@ -20,6 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import tk.duelnode.lobby.Plugin;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class ItemBuilder implements Listener {
@@ -59,6 +62,24 @@ public class ItemBuilder implements Listener {
         return this;
     }
 
+    public ItemBuilder setCustomSkull(String ui) {
+        SkullMeta a = (SkullMeta) itemStack.getItemMeta();
+        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+
+        profile.getProperties().put("textures", new Property("textures", ui));
+
+        try {
+            Field profileField = a.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(a, profile);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        itemStack.setItemMeta(a);
+        return this;
+    }
+
     public ItemBuilder addEnchant(Enchantment enchantment, int lvl) {
         ItemMeta meta = itemStack.getItemMeta();
         meta.addEnchant(enchantment, lvl, true);
@@ -69,7 +90,7 @@ public class ItemBuilder implements Listener {
     public ItemBuilder setLore(String... lore) {
         ItemMeta meta = itemStack.getItemMeta();
         List<String> l = new ArrayList<>();
-        for(String s : lore) l.add(ChatColor.translateAlternateColorCodes('&', s));
+        for (String s : lore) l.add(ChatColor.translateAlternateColorCodes('&', s));
         meta.setLore(l);
         itemStack.setItemMeta(meta);
         return this;
@@ -100,8 +121,8 @@ public class ItemBuilder implements Listener {
         uid.setString("uid", UUID.randomUUID().toString());
         tags.add(uid);
 
-        for(NBTTagCompound nbt : tags) {
-            for(String s : nbt.c()) {
+        for (NBTTagCompound nbt : tags) {
+            for (String s : nbt.c()) {
                 itemNms.getTag().set(s, nbt.get(s));
             }
         }
@@ -114,11 +135,11 @@ public class ItemBuilder implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         Action a = e.getAction();
-        if(a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK || e.getItem() == null || e.getItem().getType() == Material.AIR)
+        if (a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK || e.getItem() == null || e.getItem().getType() == Material.AIR)
             return;
 
-        if(e.getItem().equals(itemStack)) {
-            if(itemEvent != null && e.getHand() == EquipmentSlot.HAND) {
+        if (e.getItem().equals(itemStack)) {
+            if (itemEvent != null && e.getHand() == EquipmentSlot.HAND) {
                 e.setCancelled(true);
                 itemEvent.e(e.getPlayer());
             }
