@@ -2,24 +2,21 @@ package tk.duelnode.lobby.manager;
 
 
 import org.atteo.classindex.ClassIndex;
-import tk.duelnode.lobby.data.packet.ClassType;
-import tk.duelnode.lobby.data.packet.PacketEvent;
-import tk.duelnode.lobby.data.packet.PacketEventReference;
+import tk.duelnode.api.API;
+import tk.duelnode.api.util.packet.ClassType;
+import tk.duelnode.api.util.packet.PacketEvent;
+import tk.duelnode.api.util.packet.PacketEventReference;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 import tk.duelnode.lobby.manager.dynamic.annotations.PostInit;
 import tk.duelnode.lobby.manager.dynamic.annotations.PreInit;
 
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DynamicManager {
 
     private static final Map<Class<?>, Object> reflectionClasses = new HashMap<>();
-    private static final ConcurrentHashMap<Class<?>, CopyOnWriteArrayList<PacketEventReference>> packetMap = new ConcurrentHashMap<>();
 
     public static void init(ClassLoader loader) {
         ClassIndex.getAnnotated(PreInit.class, loader).forEach(DynamicManager::selfConstruct);
@@ -40,7 +37,7 @@ public class DynamicManager {
                             if(annotation != null) {
                                 Class<?> reference = annotation.packet();
                                 PacketEventReference packetEventReference = new PacketEventReference(m, classOb, reference);
-                                add(reference, packetEventReference);
+                                API.getPacketInjector().add(reference, packetEventReference);
                             }
                         }
                     }
@@ -63,19 +60,6 @@ public class DynamicManager {
             e.printStackTrace();
             return null;
         }
-    }
-
-    private static void add(Class<?> clazz, PacketEventReference reference) {
-        List<PacketEventReference> list = list(clazz);
-        list.add(reference);
-    }
-
-    private static CopyOnWriteArrayList<PacketEventReference> list(Class<?> clazz) {
-        return packetMap.computeIfAbsent(clazz,(c)->new CopyOnWriteArrayList<>());
-    }
-
-    public static List<PacketEventReference> getPacketReference(Class<?> clazz) {
-        return packetMap.get(clazz);
     }
 
     public static <T> T get(Class<T> clazz) {

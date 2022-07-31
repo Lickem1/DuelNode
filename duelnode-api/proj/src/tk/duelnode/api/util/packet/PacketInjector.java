@@ -1,19 +1,21 @@
-package tk.duelnode.lobby.data.packet;
+package tk.duelnode.api.util.packet;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.server.v1_12_R1.PlayerConnection;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Init(classType = ClassType.CONSTRUCT)
 public class PacketInjector {
 
     private final ExecutorService executor = Executors.newCachedThreadPool();
+    private final ConcurrentHashMap<Class<?>, CopyOnWriteArrayList<PacketEventReference>> packetMap = new ConcurrentHashMap<>();
 
     public void injectHandler(Player player) {
         executor.submit(() -> {
@@ -39,5 +41,18 @@ public class PacketInjector {
                 });
             }
         });
+    }
+
+    public void add(Class<?> clazz, PacketEventReference reference) {
+        List<PacketEventReference> list = list(clazz);
+        list.add(reference);
+    }
+
+    private CopyOnWriteArrayList<PacketEventReference> list(Class<?> clazz) {
+        return packetMap.computeIfAbsent(clazz,(c)->new CopyOnWriteArrayList<>());
+    }
+
+    public List<PacketEventReference> getPacketReference(Class<?> clazz) {
+        return packetMap.get(clazz);
     }
 }

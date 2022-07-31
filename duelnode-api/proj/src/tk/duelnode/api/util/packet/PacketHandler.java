@@ -1,11 +1,11 @@
-package tk.duelnode.lobby.data.packet;
+package tk.duelnode.api.util.packet;
 
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
-import tk.duelnode.lobby.manager.DynamicManager;
+import tk.duelnode.api.API;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class PacketHandler extends ChannelDuplexHandler {
     private boolean handle(Object packet, ChannelHandlerContext ctx) {
         PacketState state = new PacketState(ctx);
         if(state.isCancelled()) return false;
-        List<PacketEventReference> list = DynamicManager.getPacketReference(packet.getClass());
+        List<PacketEventReference> list = API.getPacketInjector().getPacketReference(packet.getClass());
         if(list == null) return false;
         for(PacketEventReference reference : list) {
             if(state.isCancelled()) continue;

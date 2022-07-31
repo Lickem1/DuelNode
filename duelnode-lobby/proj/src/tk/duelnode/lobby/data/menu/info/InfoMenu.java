@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import tk.duelnode.lobby.data.packet.ClassType;
+import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.manager.DynamicManager;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 import tk.duelnode.lobby.util.itembuilder.ItemBuilder;

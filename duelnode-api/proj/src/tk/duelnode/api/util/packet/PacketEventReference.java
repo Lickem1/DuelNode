@@ -1,4 +1,4 @@
-package tk.duelnode.lobby.data.packet;
+package tk.duelnode.api.util.packet;
 
 import lombok.Getter;
 import org.bukkit.entity.Player;

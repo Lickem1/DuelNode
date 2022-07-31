@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import tk.duelnode.lobby.data.packet.ClassType;
+import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.manager.DynamicManager;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 import tk.duelnode.lobby.util.itembuilder.ItemBuilder;
@@ -98,12 +98,14 @@ public class UpdateLogMenu {
 
         LOG_1("Log #1", "Jul 26, 2022 @ 5:46PM EST", new String[]{
                 "&bCommit ID:&f 54bff06bc81372c2c19b066fcb19b136786fef31",
+                "&7 ",
                 "&7Just an initial commit, setting up main project for spigot implementation.",
                 "&7Getting maven and the project setup for further development.",
         }),
 
         LOG_2("Log #2", "Jul 26, 2022 @ 11:38PM EST", new String[]{
                 "&bCommit ID:&f e6a4c0d3325a4d950fbfec32844326e9369d9a0c",
+                "&7 ",
                 "&7Main focus in this push is for the lobby, getting things",
                 "&7looking presentable, implementing our core class files, apis, etc.",
                 "&7(Highlighting the AirChunk class as it's a nice way to prevent normal",
@@ -112,6 +114,7 @@ public class UpdateLogMenu {
 
         LOG_3("Log #3", "Jul 27, 2022 @ 1:05PM EST", new String[]{
                 "&bCommit ID:&f 0f27022be509a2e7b60affe4c448dcb579c99e88",
+                "&7 ",
                 "&7Some more work done on the lobby portion. Again, making things look",
                 "&7pretty and presentable, this time adding some more dependencies such as",
                 "&7LettuceIO (which we will use to communicate between servers)",
@@ -122,17 +125,27 @@ public class UpdateLogMenu {
 
         LOG_4("Log #4", "Jul 28, 2022 @ 1:04PM EST", new String[]{
                 "&bCommit ID:&f b15205db26f7c0c92c98df2486f9cdaef11b114f",
+                "&7 ",
                 "&7AGAIN, some more work done on the lobby portion, hopefully this upcoming",
                 "&7commit will be my last one on the design on lobby, now we will start implementing",
                 "&7cross-server communication and duel creation (See gameserver for more)"
         }),
 
         LOG_5("Log #5", "Jul 29, 2022 @ 1:30AM EST", new String[]{
-                "&bCommit ID:&f 168a694a90595a27c378490e7ca3b5f02c733424",
-                "&bCommit ID:&f 094e615e8aae28657028d6f8ff3e3cf00d5c01f7",
+                "&bCommit ID:",
+                "&7 - &f168a694a90595a27c378490e7ca3b5f02c733424",
+                "&7 - &f094e615e8aae28657028d6f8ff3e3cf00d5c01f7",
+                "&7 ",
                 "&7AGAIN, some more work done on the lobby portion, making it look pretty",
                 "&7Wow we should be able to start implementing",
                 "&7cross-server communication and duel creation (See gameserver for more)"
+        }),
+
+        LOG_6("Log #6", "Jul 30, 2022 @ 11:04AM EST", new String[]{
+                "&bCommit ID:&f 71d7a3100c872a7275e5b51d16df7810ddcaf308",
+                "&7 ",
+                "&7Implemented basic queue system",
+                "&7Starting development on the gameserver portion."
         });
 
 

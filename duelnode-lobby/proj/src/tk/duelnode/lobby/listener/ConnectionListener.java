@@ -4,9 +4,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
+import tk.duelnode.api.API;
+import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.Plugin;
-import tk.duelnode.lobby.data.packet.ClassType;
-import tk.duelnode.lobby.data.packet.PacketInjector;
 import tk.duelnode.lobby.data.player.PlayerData;
 import tk.duelnode.lobby.manager.DynamicManager;
 import tk.duelnode.lobby.manager.PlayerDataManager;
@@ -21,7 +21,7 @@ public class ConnectionListener extends DynamicListener {
         Player p = e.getPlayer();
         PlayerData data = DynamicManager.get(PlayerDataManager.class).getProfile(p);
         data.setPlayer(e.getPlayer());
-        DynamicManager.get(PacketInjector.class).injectHandler(e.getPlayer()); // packet injector
+        API.getPacketInjector().injectHandler(e.getPlayer()); // packet injector
 
 
         p.teleport(Plugin.getInstance().getSpawnLocation());

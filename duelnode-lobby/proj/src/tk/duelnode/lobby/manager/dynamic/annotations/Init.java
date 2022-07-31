@@ -1,7 +1,7 @@
 package tk.duelnode.lobby.manager.dynamic.annotations;
 
 import org.atteo.classindex.IndexAnnotated;
-import tk.duelnode.lobby.data.packet.ClassType;
+import tk.duelnode.api.util.packet.ClassType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -3,8 +3,8 @@ package tk.duelnode.lobby.data.player;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.Plugin;
-import tk.duelnode.lobby.data.packet.ClassType;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 
 @Init(classType = ClassType.CONSTRUCT)

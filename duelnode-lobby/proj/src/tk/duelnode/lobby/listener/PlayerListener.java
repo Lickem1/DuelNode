@@ -1,6 +1,5 @@
 package tk.duelnode.lobby.listener;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,9 +12,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
-import org.bukkit.inventory.EquipmentSlot;
+import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.data.menu.info.InfoMenu;
-import tk.duelnode.lobby.data.packet.ClassType;
 import tk.duelnode.lobby.data.player.PlayerData;
 import tk.duelnode.lobby.data.queue.QueueManager;
 import tk.duelnode.lobby.manager.DynamicManager;

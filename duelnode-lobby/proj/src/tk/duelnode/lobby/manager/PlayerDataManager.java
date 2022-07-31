@@ -5,15 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import tk.duelnode.api.API;
 import tk.duelnode.lobby.Plugin;
-import tk.duelnode.lobby.data.packet.ClassType;
-import tk.duelnode.lobby.data.packet.PacketInjector;
 import tk.duelnode.lobby.data.player.PlayerData;
 import tk.duelnode.lobby.data.queue.QueueManager;
 import tk.duelnode.lobby.manager.dynamic.DynamicListener;
-import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 import tk.duelnode.lobby.manager.dynamic.annotations.PreInit;
 
 import java.util.Map;
@@ -67,7 +64,7 @@ public class PlayerDataManager extends DynamicListener {
         if(data != null && data.isInQueue()) queueManager.removeFromQueue(data);
         delete(e.getPlayer());
 
-        DynamicManager.get(PacketInjector.class).ejectHandler(e.getPlayer()); // packet injector
+        API.getPacketInjector().ejectHandler(e.getPlayer()); // packet injector
 
     }
 }

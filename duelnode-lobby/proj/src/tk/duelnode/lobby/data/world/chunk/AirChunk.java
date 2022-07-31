@@ -43,6 +43,7 @@ public class AirChunk extends Chunk {
                     if (neighbor != null) {
                         neighbor.setNeighborLoaded(-x, -z);
                         setNeighborLoaded(x, z);
+                        neighbor.initLighting();
                     }
                 }
             }

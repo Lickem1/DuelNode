@@ -12,7 +12,6 @@ import java.util.List;
 public class ScoreboardAdapter implements PlasmaAdapter {
 
     private int tick = 0;
-    private int test = 0;
 
     @Override
     public String getTitle(Player player) {

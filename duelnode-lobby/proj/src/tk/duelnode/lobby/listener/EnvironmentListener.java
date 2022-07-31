@@ -6,7 +6,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-import tk.duelnode.lobby.data.packet.ClassType;
+import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.manager.dynamic.DynamicListener;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 

@@ -1,7 +1,6 @@
 tk.duelnode.lobby.data.menu.GameServerMenu
 tk.duelnode.lobby.data.menu.info.InfoMenu
 tk.duelnode.lobby.data.menu.info.UpdateLogMenu
-tk.duelnode.lobby.data.packet.PacketInjector
 tk.duelnode.lobby.data.player.VoidSpawnHandler
 tk.duelnode.lobby.data.queue.QueueManager
 tk.duelnode.lobby.data.world.WorldListener

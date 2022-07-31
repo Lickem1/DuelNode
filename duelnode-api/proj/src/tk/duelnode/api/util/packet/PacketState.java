@@ -1,4 +1,4 @@
-package tk.duelnode.lobby.data.packet;
+package tk.duelnode.api.util.packet;
 
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
