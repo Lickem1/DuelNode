@@ -52,11 +52,6 @@ public class PlayerDataManager extends DynamicListener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void join(AsyncPlayerPreLoginEvent e) {
-        createData(e.getUniqueId());
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
     public void leave(PlayerQuitEvent e) {
         PlayerData data = getProfile(e.getPlayer());
 

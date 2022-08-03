@@ -5,8 +5,6 @@ D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\data\menu\GameSer
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\data\player\VoidSpawnHandler.java
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\data\world\chunk\NMSChunk.java
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\listener\PlayerListener.java
-D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\util\menu\MenuHolder.java
-D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\util\menu\MenuListener.java
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\manager\DynamicManager.java
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\manager\PlayerDataManager.java
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\util\itembuilder\ItemEvent.java
@@ -21,8 +19,6 @@ D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\Plugin.java
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\data\queue\QueueManager.java
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\manager\ScoreboardAdapter.java
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\manager\dynamic\DynamicListener.java
-D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\util\menu\MenuEvent.java
-D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\util\menu\MenuBuilder.java
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\listener\EnvironmentListener.java
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\manager\dynamic\annotations\PostInit.java
 D:\Intellij\DuelNode\duelnode-lobby\proj\src\tk\duelnode\lobby\data\menu\info\UpdateLogMenu.java

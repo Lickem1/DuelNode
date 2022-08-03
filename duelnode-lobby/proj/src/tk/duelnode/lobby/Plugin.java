@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
+import tk.duelnode.api.util.menu.MenuListener;
 import tk.duelnode.api.util.plasma.Plasma;
 import tk.duelnode.api.util.redis.RedisManager;
 import tk.duelnode.lobby.data.world.chunk.NMSChunk;
@@ -28,6 +29,7 @@ public class Plugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
         new Plasma(this, new ScoreboardAdapter());
+        new MenuListener(this);
         DynamicManager.init(this.getClassLoader());
 
 

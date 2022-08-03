@@ -5,11 +5,12 @@ import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import lombok.Getter;
 import org.bukkit.*;
+import org.bukkit.inventory.ItemStack;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.gameserver.GameServer;
-import tk.duelnode.gameserver.data.arena.Arena;
-import tk.duelnode.gameserver.data.arena.ArenaState;
-import tk.duelnode.gameserver.data.arena.Cube;
+import tk.duelnode.api.game.arena.Arena;
+import tk.duelnode.api.game.arena.ArenaState;
+import tk.duelnode.api.game.arena.Cube;
 import tk.duelnode.gameserver.manager.dynamic.annotations.PostInit;
 import tk.duelnode.gameserver.util.WorldEditUtil;
 
@@ -20,10 +21,11 @@ import java.util.*;
 @PostInit(classType = ClassType.CONSTRUCT)
 public class ArenaManager {
 
-    private final Map<String, Arena> allArenas = new HashMap<>();
-    private final LinkedList<Arena> availableArenas = new LinkedList<>();
-    private final List<Arena> arenasInUse = new ArrayList<>();
+    private final Map<String, Arena> allArenas = new LinkedHashMap<>();
+    private final Map<String, Arena> availableArenas = new LinkedHashMap<>();
+    private final Map<String, Arena> arenasInUse = new LinkedHashMap<>();
 
+    private double pasteXZ = -25E6;
     private int grid = 0;
     private final int yLevel = 70;
 
@@ -44,7 +46,6 @@ public class ArenaManager {
                         for (int z = 0; z < clipboard.getDimensions().getBlockZ(); z++) {
                             Vector t = new Vector(x, y, z).add(clipboard.getMinimumPoint());
                             BaseBlock block = clipboard.getBlock(t);
-
 
                             boolean remove = false;
                             if (block.getId() == Material.SPONGE.getId()) {
@@ -75,41 +76,45 @@ public class ArenaManager {
     }
 
     public boolean isArenaFree(Arena arena) {
-        return (availableArenas.contains(arena));
+        return (availableArenas.get(arena.getID()) != null);
     }
 
     public void setArenaState(Arena arena, ArenaState state) {
         switch (state) {
             case UNAVAILABLE:
-                availableArenas.remove(arena);
-                arenasInUse.add(arena);
+                availableArenas.remove(arena.getID());
+                arenasInUse.put(arena.getID(), arena);
                 break;
             case AVAILABLE:
-                arenasInUse.remove(arena);
-                availableArenas.add(arena);
+                arenasInUse.remove(arena.getID(), arena);
+                availableArenas.put(arena.getID(), arena);
                 break;
         }
     }
 
     public Arena getFreeArena() {
-        //if(availableArenas.isEmpty()) return pasteNewArena(allArenas.get("battlepit"));
+        //if(availableArenas.isEmpty()) {
+        //    Object[] values = allArenas.values().toArray();
+        //    return pasteNewArena((Arena) values[new Random().nextInt(values.length)]);
+        //}
         //else return availableArenas.getFirst();
-        return pasteNewArena(allArenas.get("battlepit"));
+        Object[] values = allArenas.values().toArray();
+        return pasteNewArena((Arena) values[new Random().nextInt(values.length)]);
     }
 
     private Arena pasteNewArena(Arena a) {
         World world = Bukkit.getWorld("world");
-        Arena cloned = Arena.clone(a);
+        Arena cloned = a.clone();
         Cube cuboid = cloned.getCuboid();
         Clipboard clipboard = cloned.getClipboard();
 
-        System.out.println("[Debug] Pasting new arena at (" + grid + ", " + yLevel + ", " + grid + ")");
-        DynamicManager.get(WorldEditUtil.class).paste(clipboard, new Vector(grid, yLevel, grid), world);
-
+        System.out.println("[Debug] Pasting new arena at (" + pasteXZ + ", " + yLevel + ", " + pasteXZ + ")");
+        DynamicManager.get(WorldEditUtil.class).paste(clipboard, new Vector(pasteXZ, yLevel, pasteXZ), world);
         fixLocations(cloned.getLoc1(), cloned.getLoc2(), cloned.getCenter(), cuboid.getBlockX(), cuboid.getBlockZ());
 
-        availableArenas.add(cloned);
-        grid += 500;
+        availableArenas.put(cloned.getID(), cloned);
+        grid += 200;
+        pasteXZ += grid;
         return cloned;
     }
 
@@ -124,13 +129,17 @@ public class ArenaManager {
                     arena.setDisplayName(lines[1]);
                     break;
                 case "center":
-                    arena.setCenter(new Location(Bukkit.getWorld("world"), x, (y+yLevel), z, 0, 0));
+                    arena.setCenter(new Location(Bukkit.getWorld("world"), x, y, z, 0, 0));
                     break;
                 case "spawn1":
-                    arena.setLoc1(new Location(Bukkit.getWorld("world"), x, (y+yLevel), z, Float.parseFloat(lines[1]), 0));
+                    arena.setLoc1(new Location(Bukkit.getWorld("world"), x, y, z, Float.parseFloat(lines[1]), 0));
                     break;
                 case "spawn2":
-                    arena.setLoc2(new Location(Bukkit.getWorld("world"), x, (y+yLevel), z, Float.parseFloat(lines[1]), 0));
+                    arena.setLoc2(new Location(Bukkit.getWorld("world"), x, y, z, Float.parseFloat(lines[1]), 0));
+                    break;
+                case "icon":
+                    ItemStack stack = new ItemStack(Material.getMaterial(Integer.parseInt(lines[1])), 1, Short.parseShort(lines[2]));
+                    arena.setIcon(stack);
                     break;
             }
             return true;
@@ -139,6 +148,10 @@ public class ArenaManager {
     }
 
     private void fixLocations(Location... locations) {
-        for(Location loc : locations) loc.add(new org.bukkit.util.Vector(grid, 0, grid));
+        for(Location loc : locations) loc.add(new org.bukkit.util.Vector(pasteXZ, yLevel, pasteXZ));
+    }
+
+    public Arena getFreeArenaFromID(String id) {
+        return availableArenas.get(id);
     }
 }

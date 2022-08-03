@@ -7,11 +7,11 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import tk.duelnode.api.util.menu.MenuBuilder;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.manager.DynamicManager;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 import tk.duelnode.lobby.util.itembuilder.ItemBuilder;
-import tk.duelnode.lobby.util.menu.MenuBuilder;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -128,7 +128,7 @@ public class UpdateLogMenu {
                 "&7 ",
                 "&7AGAIN, some more work done on the lobby portion, hopefully this upcoming",
                 "&7commit will be my last one on the design on lobby, now we will start implementing",
-                "&7cross-server communication and duel creation (See gameserver for more)"
+                "&7cross-server communication and duel creation (See game server for more)"
         }),
 
         LOG_5("Log #5", "Jul 29, 2022 @ 1:30AM EST", new String[]{
@@ -145,7 +145,19 @@ public class UpdateLogMenu {
                 "&bCommit ID:&f 71d7a3100c872a7275e5b51d16df7810ddcaf308",
                 "&7 ",
                 "&7Implemented basic queue system",
-                "&7Starting development on the gameserver portion."
+                "&7Starting development on the game server portion."
+        }),
+
+        LOG_7("Log #7", "Jul 30, 2022 @ 11:08PM EST", new String[]{
+            "&bCommit ID:&f 8ca2a07f2f40a68f4eb012345210a71e957630db",
+                    "&7 ",
+                    "&7Loads of work done on the game server portion",
+                    "&7Still haven't linked the servers together quite yet, but it's very close to completion",
+                    "&7Infinite arena feature implemented, arenas get pasted and spread out within the world",
+                    "&7Developing a system to increase performance with arenas, so they only get generated if needed",
+                    " ",
+                    "&cBug Fixes",
+                    "&7A minor, but annoying bug within the chunk generation where it doesn't update light sources"
         });
 
 

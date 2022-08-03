@@ -1,8 +1,6 @@
 package tk.duelnode.gameserver.listener;
 
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -30,4 +28,5 @@ public class EnvironmentListener extends DynamicListener {
     public void weatherChange(WeatherChangeEvent e) {
         if(e.toWeatherState()) e.setCancelled(true);
     }
+
 }

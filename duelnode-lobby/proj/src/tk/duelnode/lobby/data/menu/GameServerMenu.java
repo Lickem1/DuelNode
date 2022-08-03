@@ -1,9 +1,9 @@
 package tk.duelnode.lobby.data.menu;
 
 import lombok.Getter;
+import tk.duelnode.api.util.menu.MenuBuilder;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
-import tk.duelnode.lobby.util.menu.MenuBuilder;
 
 @Getter
 @Init(classType = ClassType.CONSTRUCT)

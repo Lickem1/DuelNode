@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tk.duelnode.lobby.data.queue.Queue;
+import tk.duelnode.lobby.data.queue.QueueManager;
+import tk.duelnode.lobby.manager.DynamicManager;
 import tk.duelnode.lobby.util.itembuilder.ItemBuilder;
 
 import java.util.UUID;
@@ -26,6 +28,7 @@ public class PlayerData {
 
     public void createLobbyPlayer() {
         if(player == null) return;
+        if(current_Queue != null) DynamicManager.get(QueueManager.class).removeFromQueue(this);
 
         ItemStack queue = new ItemBuilder(Material.DIAMOND_SWORD, 1,0).setName("&7» &bClick to join queue &7«").build();
         ItemStack info = new ItemBuilder(Material.BOOK, 1,0).setName("&7» &bInfo &7«").build();

@@ -5,8 +5,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import tk.duelnode.api.game.sent.GameData;
-import tk.duelnode.api.game.sent.GameType;
+import tk.duelnode.api.game.sent.GlobalGame;
+import tk.duelnode.api.game.sent.GlobalGameType;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.Plugin;
 import tk.duelnode.lobby.data.player.PlayerData;
@@ -45,12 +45,9 @@ public class QueueManager extends BukkitRunnable {
             PlayerData data = queue.get(0);
             PlayerData data2 = queue.get(1);
 
-            GameData gD = new GameData(GameType.DUEL);
+            GlobalGame gD = new GlobalGame(GlobalGameType.DUEL);
             gD.addTeam1(data.getUUID());
             gD.addTeam2(data2.getUUID());
-
-            removeFromQueue(data);
-            removeFromQueue(data2);
 
             data.createLobbyPlayer();
             data2.createLobbyPlayer();
@@ -58,7 +55,7 @@ public class QueueManager extends BukkitRunnable {
             gD.sendMessage("&7Match found, please allow a few seconds to commence...");
             gD.sendMessage("&cUnable to start match");
 
-            gD.send("test", Plugin.getInstance().getRedisManager());
+            gD.message("likmDS", Plugin.getInstance().getRedisManager());
 
             // todo send to gameserver then send players to that server
         }

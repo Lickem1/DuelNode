@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
+import tk.duelnode.api.util.menu.MenuListener;
 import tk.duelnode.api.util.plasma.Plasma;
 import tk.duelnode.api.util.redis.RedisManager;
 import tk.duelnode.gameserver.data.world.chunk.NMSChunk;
@@ -22,14 +23,17 @@ public class GameServer extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        DynamicManager.init(this.getClassLoader());
         new Plasma(this, new ScoreboardAdapter());
+        new MenuListener(this);
         for(World worlds : Bukkit.getWorlds()) new NMSChunk(worlds);
 
         RedisClient client = RedisClient.create("redis://yourmom@" + "localhost" + ":" + "6379");
         this.redisManager = new RedisManager(client, "yourmom");
 
         if(!getDataFolder().exists()) getDataFolder().mkdirs();
+
+        DynamicManager.init(this.getClassLoader());
+
 
     }
 

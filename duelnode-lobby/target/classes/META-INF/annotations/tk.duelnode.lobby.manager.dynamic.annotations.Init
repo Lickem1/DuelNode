@@ -8,4 +8,3 @@ tk.duelnode.lobby.listener.ConnectionListener
 tk.duelnode.lobby.listener.EnvironmentListener
 tk.duelnode.lobby.listener.PlayerListener
 tk.duelnode.lobby.util.WorldEditUtil
-tk.duelnode.lobby.util.menu.MenuListener
