@@ -7,9 +7,9 @@ import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.api.util.redis.RedisManager;
 import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.gameserver.manager.DynamicManager;
-import tk.duelnode.gameserver.manager.dynamic.annotations.PostInit;
+import tk.duelnode.gameserver.manager.dynamic.annotations.Init;
 
-@PostInit(classType = ClassType.CONSTRUCT)
+@Init(priority = 90,classType = ClassType.CONSTRUCT)
 public class GameSubscriber {
 
     public GameSubscriber() {
@@ -22,7 +22,6 @@ public class GameSubscriber {
 
             GlobalGame globalGame = API.getGson().fromJson(message, GlobalGame.class);
             manager.createGame(globalGame);
-
 
         }));
 

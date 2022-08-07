@@ -27,7 +27,7 @@ public class GameServer extends JavaPlugin {
         new MenuListener(this);
         for(World worlds : Bukkit.getWorlds()) new NMSChunk(worlds);
 
-        RedisClient client = RedisClient.create("redis://yourmom@" + "localhost" + ":" + "6379");
+        RedisClient client = RedisClient.create("redis://yourmom@" + "lickem.tk" + ":" + "6379");
         this.redisManager = new RedisManager(client, "yourmom");
 
         if(!getDataFolder().exists()) getDataFolder().mkdirs();

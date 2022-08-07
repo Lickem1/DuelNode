@@ -2,22 +2,17 @@ package tk.duelnode.gameserver.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import tk.duelnode.api.API;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.gameserver.data.player.PlayerData;
 import tk.duelnode.gameserver.manager.dynamic.DynamicListener;
-import tk.duelnode.gameserver.manager.dynamic.annotations.PreInit;
+import tk.duelnode.gameserver.manager.dynamic.annotations.Init;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
-@PreInit(classType = ClassType.CONSTRUCT)
+@Init(priority = 101, classType = ClassType.CONSTRUCT)
 public class PlayerDataManager extends DynamicListener {
 
     public PlayerDataManager() {
@@ -49,15 +44,5 @@ public class PlayerDataManager extends DynamicListener {
 
     public void delete(Player p) {
         playerMaps.remove(p.getUniqueId());
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void leave(PlayerQuitEvent e) {
-        PlayerData data = getProfile(e.getPlayer());
-
-        delete(e.getPlayer());
-
-        API.getPacketInjector().ejectHandler(e.getPlayer()); // packet injector
-
     }
 }

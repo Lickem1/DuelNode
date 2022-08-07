@@ -37,7 +37,7 @@ public class PacketInjector {
                 ChannelPipeline pipeline = channel.pipeline();
 
                 channel.eventLoop().execute(() -> {
-                    if (pipeline.get("dn-packethandler") != null) pipeline.remove("whole-packethandler");
+                    if (pipeline.get("dn-packethandler") != null) pipeline.remove("dn-packethandler");
                 });
             }
         });

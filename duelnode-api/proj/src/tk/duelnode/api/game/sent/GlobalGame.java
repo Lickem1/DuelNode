@@ -46,24 +46,32 @@ public class GlobalGame {
         list.addAll(spectators);
 
         list.removeIf(uuid -> Bukkit.getServer().getPlayer(uuid) == null);
-        for(UUID uuid : list) {
+        for (UUID uuid : list) {
             Player p = Bukkit.getServer().getPlayer(uuid);
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
         }
     }
 
-    public boolean post(String gameServer, RedisManager redis) {
+    public boolean isInGame(UUID uuid) {
+        List<UUID> list = new ArrayList<>();
+        list.addAll(team1);
+        list.addAll(team2);
+        list.addAll(spectators);
+        return list.contains(uuid);
+    }
+
+    public boolean post(String gameID, RedisManager redis) {
         try {
-            redis.getRedisConnection().async().set("dn/gamedata/" + gameServer, API.getGson().toJson(this));
+            redis.getRedisConnection().async().set("dn/gamedata/" + gameID, API.getGson().toJson(this));
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean delete(String gameServer, RedisManager redis) {
+    public boolean delete(String gameID, RedisManager redis) {
         try {
-            redis.getRedisConnection().async().del("dn/gamedata/" + gameServer);
+            redis.getRedisConnection().async().del("dn/gamedata/" + gameID);
             return true;
         } catch (Exception e) {
             return false;
@@ -76,6 +84,32 @@ public class GlobalGame {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public static GlobalGame getGameData(String gameServer, RedisManager redis) {
+        try {
+            String string = redis.getRedisConnection().async().get("dn/server/gameserver/" + gameServer).get();
+
+            return API.getGson().fromJson(string, GlobalGame.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static List<GlobalGame> getAllGameData(String gameServer, RedisManager redis) {
+        List<GlobalGame> globalGameList = new ArrayList<>();
+        try {
+            List<String> string = redis.getRedisConnection().async().keys("dn/server/gameserver/*").get();
+
+            for(String s : string) {
+                GlobalGame game = API.getGson().fromJson(redis.getRedisConnection().async().get(s).get(), GlobalGame.class);
+                globalGameList.add(game);
+            }
+
+            return globalGameList;
+        } catch (Exception e) {
+            return globalGameList;
         }
     }
 }

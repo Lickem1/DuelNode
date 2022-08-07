@@ -11,7 +11,6 @@ import tk.duelnode.gameserver.manager.dynamic.annotations.Init;
 @Init(classType = ClassType.CONSTRUCT)
 public class EnvironmentListener extends DynamicListener {
 
-
     @EventHandler
     public void spawn(CreatureSpawnEvent e) {
         if(e.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {

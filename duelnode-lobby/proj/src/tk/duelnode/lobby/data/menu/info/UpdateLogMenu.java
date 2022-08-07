@@ -158,6 +158,14 @@ public class UpdateLogMenu {
                     " ",
                     "&cBug Fixes",
                     "&7A minor, but annoying bug within the chunk generation where it doesn't update light sources"
+        }),
+
+        LOG_8("Log #8", "Aug 8, 2022 @ 5:37PM EST", new String[]{
+                "&bCommit ID:&f 70f61a4ca27c5cfa0603a35238d79a4de69652be",
+                "&7 ",
+                "&7Done some more work on the game server portion",
+                "&7Creating stuff for local games, basically just general game functionality",
+                "&7Also creating a global game system to view/manage active games from other locations (servers)"
         });
 
 

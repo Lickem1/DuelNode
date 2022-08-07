@@ -11,14 +11,14 @@ import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.api.game.arena.Arena;
 import tk.duelnode.api.game.arena.ArenaState;
 import tk.duelnode.api.game.arena.Cube;
-import tk.duelnode.gameserver.manager.dynamic.annotations.PostInit;
+import tk.duelnode.gameserver.manager.dynamic.annotations.Init;
 import tk.duelnode.gameserver.util.WorldEditUtil;
 
 import java.io.File;
 import java.util.*;
 
 @Getter
-@PostInit(classType = ClassType.CONSTRUCT)
+@Init(priority = 90, classType = ClassType.CONSTRUCT)
 public class ArenaManager {
 
     private final Map<String, Arena> allArenas = new LinkedHashMap<>();
@@ -49,7 +49,6 @@ public class ArenaManager {
 
                             boolean remove = false;
                             if (block.getId() == Material.SPONGE.getId()) {
-                                System.out.println(y);
                                 if(y==27) cube.setBlockX(new Location(world, x, (y+yLevel), z));
                                 else if(y == 0) cube.setBlockZ(new Location(world, x, (y+yLevel), z));
                                 remove = true;

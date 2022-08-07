@@ -2,11 +2,15 @@ package tk.duelnode.gameserver.data.game;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import tk.duelnode.api.game.arena.Arena;
-import tk.duelnode.gameserver.data.game.impl.StartingTick;
+import tk.duelnode.api.game.sent.GlobalGame;
+import tk.duelnode.gameserver.data.game.impl.FinishLogic;
+import tk.duelnode.gameserver.data.game.impl.StartingLogic;
+import tk.duelnode.gameserver.data.player.PlayerData;
+import tk.duelnode.gameserver.manager.DynamicManager;
+import tk.duelnode.gameserver.manager.game.GameManager;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,43 +22,69 @@ import java.util.UUID;
 public class LocalGame {
 
     private final UUID ID;
-    private final LinkedList<UUID> team1 = new LinkedList<>();
-    private final LinkedList<UUID> team2 = new LinkedList<>();
-    private final LinkedList<UUID> spectators = new LinkedList<>();
+    private final LinkedList<PlayerData> team1 = new LinkedList<>();
+    private final LinkedList<PlayerData> team2 = new LinkedList<>();
+    private final LinkedList<PlayerData> spectators = new LinkedList<>();
+    private final LinkedList<PlayerData> playersAlive = new LinkedList<>();
+    private final LinkedList<PlayerData> playersDead = new LinkedList<>();
     private LocalGameTick gameTick;
+    private LocalGameType gameType;
     private Arena arena;
+    private GlobalGame globalGame;
 
     public LocalGame(UUID id) {
         this.ID = id;
-        this.gameTick = new StartingTick();
+        this.gameTick = new StartingLogic();
+        this.gameType = LocalGameType.DUEL; // todo send this over for global usage
     }
 
-    public boolean isInGame(UUID uuid) {
+    public boolean isInGame(PlayerData uuid) {
         return getAllPlayers().contains(uuid);
     }
 
-    public List<UUID> getAllPlayers() {
-        List<UUID> list = new ArrayList<>();
+    public List<PlayerData> getAllPlayers() {
+        List<PlayerData> list = new ArrayList<>();
         list.addAll(team1);
         list.addAll(team2);
         list.addAll(spectators);
         return list;
     }
 
-    public Location getPlayerSpawn(Player p) {
+    public List<PlayerData> getPlayablePlayers() {
+        List<PlayerData> list = new ArrayList<>();
+        list.addAll(team1);
+        list.addAll(team2);
+        return list;
+    }
+
+    public void sendMessage(String... message) {
+        for(PlayerData data : getAllPlayers()) {
+            for(String s : message) {
+                data.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',s));
+            }
+        }
+    }
+
+    public Location getPlayerSpawn(PlayerData p) {
         Location location;
-        if(spectators.contains(p.getUniqueId())) location = arena.getCenter().clone();
-        else if(team1.contains(p.getUniqueId())) location = arena.getLoc1().clone();
+        if(globalGame.getSpectators().contains(p.getUuid())) location = arena.getCenter().clone();
+        else if(globalGame.getTeam1().contains(p.getUuid())) location = arena.getLoc1().clone();
         else location = arena.getLoc2().clone();
         return location;
     }
 
     public boolean isReady() {
-        int ready = 0;
-        for(UUID uuid : getAllPlayers()) {
-            Player player = Bukkit.getServer().getPlayer(uuid);
-            if(player == null ) ready++;
-        }
-        return (ready == 0);
+        int ready = getPlayablePlayers().size();
+        return (ready >= gameType.getStartMinimum());
+    }
+
+    public void cancel() {
+        setGameTick(new FinishLogic(0));
+    }
+
+    public void handleDeath(PlayerData p) {
+        playersAlive.remove(p);
+        playersDead.add(p);
+        // do more but later
     }
 }
