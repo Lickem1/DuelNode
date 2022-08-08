@@ -19,6 +19,7 @@ tk\duelnode\api\util\packet\PacketInjector.class
 tk\duelnode\api\util\redis\Message.class
 tk\duelnode\api\util\redis\RedisListener.class
 tk\duelnode\api\util\packet\PacketHandler.class
+tk\duelnode\api\game\kit\DefaultKit.class
 tk\duelnode\api\util\plasma\PlasmaBoard.class
 tk\duelnode\api\util\packet\ClassType.class
 tk\duelnode\api\util\plasma\PlasmaThread.class

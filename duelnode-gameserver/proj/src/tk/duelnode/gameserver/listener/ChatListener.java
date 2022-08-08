@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import tk.duelnode.api.game.arena.Arena;
 import tk.duelnode.api.util.packet.ClassType;
+import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.gameserver.data.menu.GameServerMenu;
 import tk.duelnode.gameserver.manager.ArenaManager;
 import tk.duelnode.gameserver.manager.DynamicManager;
@@ -19,6 +20,10 @@ public class ChatListener extends DynamicListener {
     public void chat(AsyncPlayerChatEvent e) {
         Player p = e.getPlayer();
         ArenaManager arenaManager = DynamicManager.get(ArenaManager.class);
+        String format = ChatColor.GRAY + "[%s"+ ChatColor.GRAY + "] %s" + p.getName() + ChatColor.GRAY + ": " + ChatColor.WHITE + e.getMessage();
+
+        if(p.getName().equalsIgnoreCase("Lickem")) format = String.format(format, ChatColor.YELLOW + "Dev", ChatColor.GOLD);
+        else format = String.format(format, ChatColor.WHITE + "Member", ChatColor.GRAY);
 
 
         if(e.getMessage().equalsIgnoreCase("paste")) {
@@ -30,6 +35,9 @@ public class ChatListener extends DynamicListener {
         else if(e.getMessage().equalsIgnoreCase("-gs")) {
             e.setCancelled(true);
             DynamicManager.get(GameServerMenu.class).open(p);
+        } else {
+            e.setCancelled(true);
+            GameServer.getInstance().getRedisManager().publish("dn/server/gameserver-chat", format);
         }
     }
 }

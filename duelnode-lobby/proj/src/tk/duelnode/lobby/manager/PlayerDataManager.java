@@ -58,6 +58,7 @@ public class PlayerDataManager extends DynamicListener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void leave(PlayerQuitEvent e) {
+        e.setQuitMessage(null);
         PlayerData data = getProfile(e.getPlayer());
         QueueManager queueManager = DynamicManager.get(QueueManager.class);
 

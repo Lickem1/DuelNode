@@ -2,6 +2,7 @@ package tk.duelnode.gameserver.data.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import tk.duelnode.gameserver.data.game.LocalGame;
 
@@ -18,5 +19,11 @@ public class PlayerData {
 
     public PlayerData(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public void setSpectator() {
+        player.setGameMode(GameMode.CREATIVE);
+        player.setHealth(20D);
+
     }
 }

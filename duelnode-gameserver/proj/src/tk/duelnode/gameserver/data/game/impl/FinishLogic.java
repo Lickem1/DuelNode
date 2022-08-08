@@ -12,7 +12,7 @@ public class FinishLogic implements LocalGameTick {
 
     private final GameManager gameManager = DynamicManager.get(GameManager.class);
 
-    private int send_delay = 3;
+    private int send_delay = 4;
     private final int final_duration;
 
     public FinishLogic(int final_duration) {
@@ -25,7 +25,9 @@ public class FinishLogic implements LocalGameTick {
             game.setGameTick(null);
 
             Bukkit.getServer().getScheduler().runTask(GameServer.getInstance(), () -> {
-                for(PlayerData data : game.getAllPlayers()) data.getPlayer().kickPlayer("Finished");
+                for(PlayerData data : game.getAllPlayers()) {
+                    GameServer.getInstance().sendToLobby(data.getPlayer());
+                }
 
                 // send inventories back to lobby server
                 // send player back to lobby server

@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import tk.duelnode.api.util.packet.ClassType;
+import tk.duelnode.lobby.Plugin;
 import tk.duelnode.lobby.data.menu.info.InfoMenu;
 import tk.duelnode.lobby.data.player.PlayerData;
 import tk.duelnode.lobby.data.queue.QueueManager;
@@ -102,6 +103,7 @@ public class PlayerListener extends DynamicListener {
 
         if(p.getName().equalsIgnoreCase("Lickem")) format = String.format(format, ChatColor.YELLOW + "Dev", ChatColor.GOLD);
         else format = String.format(format, ChatColor.WHITE + "Member", ChatColor.GRAY);
-        e.setFormat(format);
+        e.setCancelled(true);
+        Plugin.getInstance().getRedisManager().publish("dn/server/gameserver-chat", format);
     }
 }

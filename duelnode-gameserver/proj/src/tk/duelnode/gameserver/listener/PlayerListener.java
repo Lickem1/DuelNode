@@ -6,9 +6,11 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
@@ -18,6 +20,7 @@ import tk.duelnode.api.game.sent.GlobalGame;
 import tk.duelnode.api.util.menu.MenuHolder;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.gameserver.data.game.LocalGame;
+import tk.duelnode.gameserver.data.game.impl.GameLogic;
 import tk.duelnode.gameserver.data.player.PlayerData;
 import tk.duelnode.gameserver.manager.DynamicManager;
 import tk.duelnode.gameserver.manager.PlayerDataManager;
@@ -43,7 +46,7 @@ public class PlayerListener extends DynamicListener {
 
             GlobalGame globalGame = game.getGlobalGame();
 
-            if(globalGame.getTeam1().contains(data.getUuid())){
+            if(globalGame.getTeam1().contains(data.getUuid())) {
                 game.getPlayersAlive().add(data);
                 game.getTeam1().add(data);
             }
@@ -67,6 +70,44 @@ public class PlayerListener extends DynamicListener {
     }
 
     @EventHandler
+    public void death(PlayerDeathEvent e) {
+        Player p = e.getEntity();
+        PlayerData data = playerDataManager.getProfile(p);
+        e.setDeathMessage(null);
+
+        if(data.getGame() != null) {
+            data.getGame().handleDeath(data);
+            e.getDrops().clear();
+        }
+    }
+
+    @EventHandler
+    public void damage(EntityDamageEvent e) {
+        if(e.getEntity() instanceof Player) {
+            Player p = (Player) e.getEntity();
+            PlayerData data = playerDataManager.getProfile(p);
+            if(data.getGame() != null && (!(data.getGame().getGameTick() instanceof GameLogic))) {
+                e.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void pickup(PlayerAttemptPickupItemEvent e) {
+        Player p = e.getPlayer();
+        PlayerData data = playerDataManager.getProfile(p);
+
+        if(data != null && data.getGame() != null) {
+            LocalGame game = data.getGame();
+
+            if(!game.isAlive(data) && (!(game.getGameTick() instanceof GameLogic))) {
+                e.setCancelled(true);
+            }
+
+        } else e.setCancelled(true);
+    }
+
+    @EventHandler
     public void join(PlayerJoinEvent e) {
         PlayerData data = DynamicManager.get(PlayerDataManager.class).getProfile(e.getPlayer());
         data.setPlayer(e.getPlayer());
@@ -76,6 +117,7 @@ public class PlayerListener extends DynamicListener {
 
     @EventHandler
     public void leave(PlayerQuitEvent e) {
+        e.setQuitMessage(null);
         PlayerData data = playerDataManager.getProfile(e.getPlayer());
 
         if(data.getGame() != null) data.getGame().handleDeath(data);

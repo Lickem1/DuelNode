@@ -18,6 +18,7 @@ public class ConnectionListener extends DynamicListener {
 
     @EventHandler
     public void join(PlayerJoinEvent e) {
+        e.setJoinMessage(null);
         Player p = e.getPlayer();
         PlayerData data = DynamicManager.get(PlayerDataManager.class).getProfile(p);
         data.setPlayer(e.getPlayer());

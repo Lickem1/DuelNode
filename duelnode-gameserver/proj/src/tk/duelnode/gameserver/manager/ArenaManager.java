@@ -92,13 +92,11 @@ public class ArenaManager {
     }
 
     public Arena getFreeArena() {
-        //if(availableArenas.isEmpty()) {
-        //    Object[] values = allArenas.values().toArray();
-        //    return pasteNewArena((Arena) values[new Random().nextInt(values.length)]);
-        //}
-        //else return availableArenas.getFirst();
-        Object[] values = allArenas.values().toArray();
-        return pasteNewArena((Arena) values[new Random().nextInt(values.length)]);
+        if(availableArenas.isEmpty()) {
+            Object[] values = allArenas.values().toArray();
+            return pasteNewArena((Arena) values[new Random().nextInt(values.length)]);
+        }
+        else return availableArenas.entrySet().iterator().next().getValue();
     }
 
     private Arena pasteNewArena(Arena a) {

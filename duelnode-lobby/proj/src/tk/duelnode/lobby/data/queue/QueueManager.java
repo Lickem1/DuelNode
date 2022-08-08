@@ -51,13 +51,22 @@ public class QueueManager extends BukkitRunnable {
 
             data.createLobbyPlayer();
             data2.createLobbyPlayer();
+            data.getPlayer().getInventory().clear();
+            data2.getPlayer().getInventory().clear();
 
             gD.sendMessage("&7Match found, please allow a few seconds to commence...");
-            gD.sendMessage("&cUnable to start match");
+            //gD.sendMessage("&cUnable to start match");
 
-            gD.message("likmDS", Plugin.getInstance().getRedisManager());
+            gD.message("na-mini-01", Plugin.getInstance().getRedisManager());
 
             // todo send to gameserver then send players to that server
+            Bukkit.getServer().getScheduler().runTaskLater(Plugin.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    Plugin.getInstance().sendToGameServer(data.getPlayer());
+                    Plugin.getInstance().sendToGameServer(data2.getPlayer());
+                }
+            }, 2*20L);
         }
 
         for(Player player : Bukkit.getServer().getOnlinePlayers()) {

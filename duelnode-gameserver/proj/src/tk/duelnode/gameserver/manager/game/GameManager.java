@@ -57,7 +57,6 @@ public class GameManager extends BukkitRunnable {
         ArenaManager arenaManager = DynamicManager.get(ArenaManager.class);
 
         //arena stuff
-        // todo roll back arena
         arenaManager.setArenaState(localGame.getArena(), ArenaState.AVAILABLE);
 
         // finalize stuff

@@ -1,6 +1,7 @@
 tk\duelnode\lobby\manager\PlayerDataManager.class
 tk\duelnode\lobby\data\menu\info\InfoMenu.class
 tk\duelnode\lobby\data\player\VoidSpawnHandler.class
+tk\duelnode\lobby\data\queue\QueueManager$1.class
 tk\duelnode\lobby\data\world\chunk\AirChunk.class
 tk\duelnode\lobby\manager\dynamic\annotations\PostInit.class
 tk\duelnode\lobby\manager\dynamic\annotations\Init.class

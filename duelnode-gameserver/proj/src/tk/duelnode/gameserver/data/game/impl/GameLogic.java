@@ -16,9 +16,9 @@ public class GameLogic implements LocalGameTick {
 
         if(gameType == LocalGameType.DUEL) {
             if(game.getPlayersAlive().size() == 1) {
+                game.setGameTick(new FinishLogic(duration));
                 PlayerData winner = game.getPlayersAlive().get(0);
                 game.sendMessage(winner.getName() + " has won the match!");
-                game.setGameTick(new FinishLogic(duration));
             }
         }
     }

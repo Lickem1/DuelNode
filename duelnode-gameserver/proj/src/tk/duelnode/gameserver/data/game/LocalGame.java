@@ -6,11 +6,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import tk.duelnode.api.game.arena.Arena;
 import tk.duelnode.api.game.sent.GlobalGame;
+import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.gameserver.data.game.impl.FinishLogic;
 import tk.duelnode.gameserver.data.game.impl.StartingLogic;
 import tk.duelnode.gameserver.data.player.PlayerData;
-import tk.duelnode.gameserver.manager.DynamicManager;
-import tk.duelnode.gameserver.manager.game.GameManager;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -73,6 +72,14 @@ public class LocalGame {
         return location;
     }
 
+    public boolean isSpectator(PlayerData p) {
+        return spectators.contains(p) || playersDead.contains(p);
+    }
+
+    public boolean isAlive(PlayerData p) {
+        return playersAlive.contains(p);
+    }
+
     public boolean isReady() {
         int ready = getPlayablePlayers().size();
         return (ready >= gameType.getStartMinimum());
@@ -85,6 +92,11 @@ public class LocalGame {
     public void handleDeath(PlayerData p) {
         playersAlive.remove(p);
         playersDead.add(p);
+
+        for(PlayerData data : getAllPlayers()) {
+            if(data != p) data.getPlayer().hidePlayer(GameServer.getInstance(), p.getPlayer());
+        }
+        p.setSpectator();
         // do more but later
     }
 }
