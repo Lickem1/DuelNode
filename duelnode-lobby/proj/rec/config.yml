@@ -1,0 +1,4 @@
+redis:
+  host: "localhost"
+  auth: "password"
+  port: 6379

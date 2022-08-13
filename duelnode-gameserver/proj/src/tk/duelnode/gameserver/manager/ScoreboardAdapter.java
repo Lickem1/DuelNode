@@ -68,32 +68,49 @@ public class ScoreboardAdapter implements PlasmaAdapter {
             } else if(game.getGameTick() instanceof GameLogic) {
 
                 if(game.getGameType() == LocalGameType.DUEL) {
-                    PlayerData p1 = game.getTeam1().get(0);
-                    PlayerData p2 = game.getTeam2().get(0);
 
-                    String[] format = {
-                            "&cOpponent: &f" + (game.getTeam1().contains(data) ? p2.getName() : p1.getName()),
-                            "&eDuration: &f" + ((GameLogic) game.getGameTick()).getGameTime(),
-                            "&bArena: &f" + game.getArena().getDisplayName(),
-                            " ",
-                            "&fTheir Ping: &a" + (game.getTeam1().contains(data) ? p2.getPlayer().spigot().getPing() : p1.getPlayer().spigot().getPing()) + "ms",
-                            "&fYour Ping: &a" + player.spigot().getPing() + "ms",
-                    };
+                    if(game.isSpectator(data)) {
 
-                    s.addAll(Arrays.asList(format));
+                        PlayerData p1 = game.getTeam1().get(0);
+                        PlayerData p2 = game.getTeam2().get(0);
+
+                        String[] format = {
+                                "&f&o" + p1.getName() + " vs " + p2.getName(),
+                                "&eDuration: &f" + ((GameLogic) game.getGameTick()).getGameTime(),
+                                "&bArena: &f" + game.getArena().getDisplayName(),
+                                " ",
+                                "&7You are currently spectating",
+                        };
+                        s.addAll(Arrays.asList(format));
+
+                    } else {
+                        PlayerData p1 = game.getTeam1().get(0);
+                        PlayerData p2 = game.getTeam2().get(0);
+
+                        String[] format = {
+                                "&cOpponent: &f" + (game.getTeam1().contains(data) ? p2.getName() : p1.getName()),
+                                "&eDuration: &f" + ((GameLogic) game.getGameTick()).getGameTime(),
+                                "&bArena: &f" + game.getArena().getDisplayName(),
+                                " ",
+                                "&fTheir Ping: &a" + (game.getTeam1().contains(data) ? p2.getPlayer().spigot().getPing() : p1.getPlayer().spigot().getPing()) + "ms",
+                                "&fYour Ping: &a" + player.spigot().getPing() + "ms",
+                        };
+
+                        s.addAll(Arrays.asList(format));
+                    }
                 }
             } else if(game.getGameTick() instanceof FinishLogic) {
 
                 if(game.getGameType() == LocalGameType.DUEL) {
-                    PlayerData p1 = game.getPlayersAlive().get(0);
-
-                    if(((FinishLogic) game.getGameTick()).getFinalTime().equalsIgnoreCase("00:00")) {
+                    FinishLogic finishLogic = (FinishLogic) game.getGameTick();
+                    if(finishLogic.getFinalTime().equalsIgnoreCase("00:00")) {
                         s.add("Game cancelled");
                     } else {
+                        PlayerData p1 = game.getPlayersAlive().get(0);
 
                         String[] format = {
                                 "&aWinner: &f" + p1.getName(),
-                                "&eDuration: &f" + ((FinishLogic) game.getGameTick()).getFinalTime()
+                                "&eDuration: &f" + finishLogic.getFinalTime()
                         };
 
                         s.addAll(Arrays.asList(format));

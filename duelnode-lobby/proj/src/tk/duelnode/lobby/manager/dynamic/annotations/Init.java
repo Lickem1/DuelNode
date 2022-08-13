@@ -13,5 +13,6 @@ import java.lang.annotation.Target;
 @IndexAnnotated
 public @interface Init {
 
+    int priority() default 100;
     ClassType[] classType();
 }

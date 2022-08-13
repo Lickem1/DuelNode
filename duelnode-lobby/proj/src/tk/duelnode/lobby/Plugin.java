@@ -33,6 +33,7 @@ public class Plugin extends JavaPlugin implements PluginMessageListener {
 
     public void onEnable() {
         instance = this;
+        this.saveDefaultConfig();
         new Plasma(this, new ScoreboardAdapter());
         new MenuListener(this);
         DynamicManager.init(this.getClassLoader());
@@ -69,10 +70,10 @@ public class Plugin extends JavaPlugin implements PluginMessageListener {
         instance = null;
     }
 
-    public void sendToGameServer(Player player) {
+    public void sendToGameServer(String gameServer, Player player) {
         ByteArrayDataOutput dataOutput = ByteStreams.newDataOutput();
         dataOutput.writeUTF("Connect");
-        dataOutput.writeUTF("na-mini-01"); // todo change this
+        dataOutput.writeUTF(gameServer); // todo change this
         player.sendPluginMessage(this, "BungeeCord", dataOutput.toByteArray());
     }
 

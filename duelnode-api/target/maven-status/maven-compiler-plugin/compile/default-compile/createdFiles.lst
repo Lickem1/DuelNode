@@ -4,6 +4,7 @@ tk\duelnode\api\util\menu\MenuEvent.class
 tk\duelnode\api\util\packet\PacketState.class
 tk\duelnode\api\API.class
 tk\duelnode\api\game\sent\GlobalGame.class
+tk\duelnode\api\game\sent\GlobalGamePlayer.class
 tk\duelnode\api\game\arena\Arena.class
 tk\duelnode\api\util\plasma\Plasma.class
 tk\duelnode\api\util\plasma\PlasmaBoardEntry.class
@@ -17,6 +18,7 @@ tk\duelnode\api\util\packet\PacketEventReference.class
 tk\duelnode\api\util\plasma\PlasmaListener.class
 tk\duelnode\api\util\packet\PacketInjector.class
 tk\duelnode\api\util\redis\Message.class
+tk\duelnode\api\game\sent\GameCondition.class
 tk\duelnode\api\util\redis\RedisListener.class
 tk\duelnode\api\util\packet\PacketHandler.class
 tk\duelnode\api\game\kit\DefaultKit.class

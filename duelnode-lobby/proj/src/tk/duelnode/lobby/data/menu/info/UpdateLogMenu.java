@@ -160,12 +160,30 @@ public class UpdateLogMenu {
                     "&7A minor, but annoying bug within the chunk generation where it doesn't update light sources"
         }),
 
-        LOG_8("Log #8", "Aug 8, 2022 @ 5:37PM EST", new String[]{
+        LOG_8("Log #8", "Aug 3, 2022 @ 5:37PM EST", new String[]{
                 "&bCommit ID:&f 70f61a4ca27c5cfa0603a35238d79a4de69652be",
                 "&7 ",
                 "&7Done some more work on the game server portion",
                 "&7Creating stuff for local games, basically just general game functionality",
                 "&7Also creating a global game system to view/manage active games from other locations (servers)"
+        }),
+
+        LOG_9("Log #9", "Aug 6, 2022 @ 11:22PM EST", new String[]{
+                "&bCommit ID:&f 4258c48ccfd1220d44ef8ecb34569611351fb675",
+                "&7 ",
+                "&7Done some more work on the game server portion",
+                "&7Local game logic should almost be complete, if not very near",
+                "&7Got annoyed with multiple Init classes, so i condensed it all into one, ",
+                "&7using an integer as a priority key",
+        }),
+
+        LOG_10("Log #10", "Aug 7, 2022 @ 9:57PM EST", new String[]{
+                "&bCommit ID:&f 050231ec186653f2edf0b6539f89e1f6fa8da391",
+                "&7 ",
+                "&7Everything works!",
+                "&7Project is very close to completion! Just need to do a few testings (not sure how to find people lol)",
+                "&7Implemented bungeecord server linking to send players to the (one) game server!!",
+                "&7Could add multiple gameserver functionality but this isn't a project that should be used in production!"
         });
 
 

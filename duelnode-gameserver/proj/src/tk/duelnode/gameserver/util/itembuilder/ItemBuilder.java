@@ -87,6 +87,22 @@ public class ItemBuilder implements Listener {
         return this;
     }
 
+    public ItemBuilder removeEnchant(Enchantment enchantment) {
+        ItemMeta meta = itemStack.getItemMeta();
+        meta.removeEnchant(enchantment);
+        itemStack.setItemMeta(meta);
+        return this;
+    }
+
+    public ItemBuilder removeAllEnchants() {
+        ItemMeta meta = itemStack.getItemMeta();
+        for(Enchantment ench : meta.getEnchants().keySet()) {
+            meta.removeEnchant(ench);
+        }
+        itemStack.setItemMeta(meta);
+        return this;
+    }
+
     public ItemBuilder setLore(String... lore) {
         ItemMeta meta = itemStack.getItemMeta();
         List<String> l = new ArrayList<>();

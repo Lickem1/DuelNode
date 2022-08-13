@@ -13,6 +13,7 @@ D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\game\kit\DefaultKit.j
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\game\sent\GlobalGame.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\packet\ClassType.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\plasma\PlasmaThread.java
+D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\game\sent\GameCondition.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\game\arena\ArenaState.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\menu\MenuListener.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\packet\PacketEvent.java
@@ -24,4 +25,5 @@ D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\packet\PacketSta
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\game\sent\GlobalGameType.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\plasma\Plasma.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\packet\PacketEventReference.java
+D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\game\sent\GlobalGamePlayer.java
 D:\Intellij\DuelNode\duelnode-api\proj\src\tk\duelnode\api\util\packet\PacketHandler.java

@@ -49,15 +49,18 @@ public class GameServerMenu extends BukkitRunnable {
         if (availableArenaSize >= 1) {
             available.addEnchant(Enchantment.MENDING, 1);
             available.addFlag(ItemFlag.HIDE_ENCHANTS);
-        }
+        } else available.removeEnchant(Enchantment.MENDING);
+
         if (unavailableArenaSize >= 1) {
             unavailable.addEnchant(Enchantment.MENDING, 1);
             unavailable.addFlag(ItemFlag.HIDE_ENCHANTS);
-        }
+        } else unavailable.removeEnchant(Enchantment.MENDING);
+
         if (allArenaSize >= 1) {
             templates.addEnchant(Enchantment.MENDING, 1);
             templates.addFlag(ItemFlag.HIDE_ENCHANTS);
-        }
+        } else templates.removeEnchant(Enchantment.MENDING);
+
         templates.getItemStack().setAmount(fixedAmount(allArenaSize));
         available.getItemStack().setAmount(fixedAmount(availableArenaSize));
         unavailable.getItemStack().setAmount(fixedAmount(unavailableArenaSize));

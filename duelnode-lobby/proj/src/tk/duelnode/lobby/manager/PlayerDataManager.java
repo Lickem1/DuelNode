@@ -7,17 +7,18 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import tk.duelnode.api.API;
+import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.Plugin;
 import tk.duelnode.lobby.data.player.PlayerData;
 import tk.duelnode.lobby.data.queue.QueueManager;
 import tk.duelnode.lobby.manager.dynamic.DynamicListener;
-import tk.duelnode.lobby.manager.dynamic.annotations.PreInit;
+import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
-@PreInit
+@Init(priority = 101, classType = ClassType.CONSTRUCT)
 public class PlayerDataManager extends DynamicListener {
 
     public PlayerDataManager() {

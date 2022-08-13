@@ -21,9 +21,12 @@ public class StartingLogic implements LocalGameTick {
         if(game.isReady()) {
 
             if(countdown == 0) {
-                for(PlayerData player : game.getAllPlayers()) {
-                    player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.BLOCK_NOTE_BELL, 1F, 1f);
-                    player.getPlayer().sendTitle(ChatColor.GREEN + "GO!", ChatColor.GRAY.toString() + ChatColor.ITALIC + "Good luck and have fun!");
+                for(PlayerData all : game.getAllPlayers()) {
+                    all.getPlayer().playSound(all.getPlayer().getLocation(), Sound.BLOCK_NOTE_BELL, 1F, 1f);
+                    all.getPlayer().sendTitle(ChatColor.GREEN + "GO!", ChatColor.GRAY.toString() + ChatColor.ITALIC + "Good luck and have fun!");
+                }
+
+                for(PlayerData player : game.getPlayablePlayers()) {
                     player.getPlayer().setHealth(20D);
                     player.getPlayer().setFoodLevel(20);
                     player.getPlayer().setSaturation(20);

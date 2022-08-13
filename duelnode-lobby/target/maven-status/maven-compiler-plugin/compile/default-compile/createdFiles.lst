@@ -3,7 +3,6 @@ tk\duelnode\lobby\data\menu\info\InfoMenu.class
 tk\duelnode\lobby\data\player\VoidSpawnHandler.class
 tk\duelnode\lobby\data\queue\QueueManager$1.class
 tk\duelnode\lobby\data\world\chunk\AirChunk.class
-tk\duelnode\lobby\manager\dynamic\annotations\PostInit.class
 tk\duelnode\lobby\manager\dynamic\annotations\Init.class
 tk\duelnode\lobby\manager\dynamic\DynamicListener.class
 tk\duelnode\lobby\data\menu\info\UpdateLogMenu.class
@@ -13,8 +12,8 @@ tk\duelnode\lobby\data\menu\info\UpdateLogMenu$Update.class
 tk\duelnode\lobby\listener\ConnectionListener.class
 tk\duelnode\lobby\data\player\PlayerData.class
 tk\duelnode\lobby\data\menu\GameServerMenu.class
+tk\duelnode\lobby\data\menu\OngoingMatchMenu.class
 tk\duelnode\lobby\data\queue\QueueManager.class
-META-INF\annotations\tk.duelnode.lobby.manager.dynamic.annotations.PreInit
 tk\duelnode\lobby\util\WorldEditUtil.class
 tk\duelnode\lobby\listener\PlayerListener.class
 tk\duelnode\lobby\manager\ScoreboardAdapter.class
@@ -27,4 +26,3 @@ tk\duelnode\lobby\manager\DynamicManager.class
 tk\duelnode\lobby\data\world\chunk\NMSChunk.class
 tk\duelnode\lobby\data\world\WorldListener.class
 tk\duelnode\lobby\listener\PlayerListener$1.class
-tk\duelnode\lobby\manager\dynamic\annotations\PreInit.class

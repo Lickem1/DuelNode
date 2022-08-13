@@ -59,15 +59,16 @@ public class LocalGame {
     public void sendMessage(String... message) {
         for(PlayerData data : getAllPlayers()) {
             for(String s : message) {
-                data.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',s));
+                if(data!=null && data.getPlayer() != null)
+                    data.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',s));
             }
         }
     }
 
     public Location getPlayerSpawn(PlayerData p) {
         Location location;
-        if(globalGame.getSpectators().contains(p.getUuid())) location = arena.getCenter().clone();
-        else if(globalGame.getTeam1().contains(p.getUuid())) location = arena.getLoc1().clone();
+        if(globalGame.containsSpectator(p.getUuid())) location = arena.getCenter().clone();
+        else if(globalGame.containsTeam1(p.getUuid())) location = arena.getLoc1().clone();
         else location = arena.getLoc2().clone();
         return location;
     }
@@ -90,13 +91,20 @@ public class LocalGame {
     }
 
     public void handleDeath(PlayerData p) {
-        playersAlive.remove(p);
-        playersDead.add(p);
+        if(gameTick != null) {
+            if(spectators.contains(p)) {
 
-        for(PlayerData data : getAllPlayers()) {
-            if(data != p) data.getPlayer().hidePlayer(GameServer.getInstance(), p.getPlayer());
+                globalGame.removeSpectator(p.getUuid());
+                globalGame.post(getID().toString(), GameServer.getInstance().getRedisManager());
+                sendMessage("&b * &f&o" + p.getName() + "&7&o is no longer spectating");
+                spectators.remove(p);
+                return;
+            }
+            playersAlive.remove(p);
+            playersDead.add(p);
+
+            for(PlayerData data : getAllPlayers()) if(data != p) data.getPlayer().hidePlayer(GameServer.getInstance(), p.getPlayer());
+            p.setSpectator();
         }
-        p.setSpectator();
-        // do more but later
     }
 }

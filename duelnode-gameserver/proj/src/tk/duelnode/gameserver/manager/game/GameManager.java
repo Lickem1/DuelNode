@@ -4,6 +4,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import tk.duelnode.api.game.arena.Arena;
 import tk.duelnode.api.game.arena.ArenaState;
 import tk.duelnode.api.game.sent.GlobalGame;
+import tk.duelnode.api.game.sent.GlobalGamePlayer;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.gameserver.data.game.LocalGame;
@@ -12,13 +13,14 @@ import tk.duelnode.gameserver.manager.ArenaManager;
 import tk.duelnode.gameserver.manager.DynamicManager;
 import tk.duelnode.gameserver.manager.dynamic.annotations.Init;
 
-import java.util.LinkedHashMap;
+import java.util.Iterator;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Init(classType = ClassType.CONSTRUCT)
 public class GameManager extends BukkitRunnable {
 
-    private final LinkedHashMap<UUID, LocalGame> gameMap = new LinkedHashMap<>();
+    private final ConcurrentHashMap<UUID, LocalGame> gameMap = new ConcurrentHashMap<>();
 
     public GameManager() {
         runTaskTimerAsynchronously(GameServer.getInstance(), 20, 20);
@@ -27,8 +29,10 @@ public class GameManager extends BukkitRunnable {
     @Override
     public void run() {
 
-        for(LocalGame game : gameMap.values()) {
-            if(game.getGameTick() != null) {
+        for(Iterator<LocalGame> games = gameMap.values().iterator(); games.hasNext();) {
+
+            LocalGame game = games.next();
+            if( game!= null && game.getGameTick() != null) {
                 game.getGameTick().doTick(game);
             }
         }
@@ -40,7 +44,7 @@ public class GameManager extends BukkitRunnable {
         Arena arena = arenaManager.getFreeArena();
 
         // global stuff
-        globalGame.setArenaID(arena.getDisplayName() +"|" + arena.getID());
+        globalGame.setArenaID(arena.getDisplayName());
 
         //local stuff
         localGame.setArena(arena);
@@ -63,6 +67,10 @@ public class GameManager extends BukkitRunnable {
         localGame.getGlobalGame().delete(localGame.getID().toString(), GameServer.getInstance().getRedisManager());
         System.out.println("[DUEL-SERVER] Game " + localGame.getID() + " finished");
         gameMap.remove(localGame.getID());
+    }
+
+    public LocalGame getGame(UUID gameID) {
+        return gameMap.get(gameID);
     }
 
     public LocalGame isInGame(UUID uuid) {

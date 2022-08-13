@@ -4,14 +4,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import tk.duelnode.api.game.sent.GlobalGame;
 import tk.duelnode.api.util.menu.MenuBuilder;
 import tk.duelnode.api.util.packet.ClassType;
+import tk.duelnode.lobby.Plugin;
+import tk.duelnode.lobby.data.menu.OngoingMatchMenu;
 import tk.duelnode.lobby.manager.DynamicManager;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 import tk.duelnode.lobby.util.itembuilder.ItemBuilder;
 
 @Init(classType = ClassType.CONSTRUCT)
-public class InfoMenu {
+public class InfoMenu extends BukkitRunnable {
 
     private final MenuBuilder menu = new MenuBuilder(54, "DuelNode Info");
 
@@ -19,9 +23,10 @@ public class InfoMenu {
 
         ItemBuilder netherStar = new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("Placeholder 1");
         ItemBuilder discordSkull = new ItemBuilder(Material.SKULL_ITEM, 1, 3).setName("&bDiscord: &7Lickem#9444");
-        ItemBuilder githubSkull = new ItemBuilder(Material.SKULL_ITEM, 1, 3).setName("&fGit&8Hub");
-        ItemBuilder youtubeSkull = new ItemBuilder(Material.SKULL_ITEM, 1, 3).setName("&fYou&cTube");
-        ItemBuilder updateLogs = new ItemBuilder(Material.ENCHANTED_BOOK, 1, 0).setName("&7Update Logs");
+        ItemBuilder githubSkull = new ItemBuilder(Material.SKULL_ITEM, 1, 3).setName("&fGit&8Hub").setLore(" &b* &fhttps://github.com/Lickem1");
+        ItemBuilder youtubeSkull = new ItemBuilder(Material.SKULL_ITEM, 1, 3).setName("&fYou&cTube").setLore(" &b* &fhttps://www.youtube.com/c/Lickem");
+        ItemBuilder updateLogs = new ItemBuilder(Material.ENCHANTED_BOOK, 1, 0).setName("&bUpdate Logs").setLore(" &b* &fClick to view all github updates!");
+        ItemBuilder ongoingMatches = new ItemBuilder(Material.COMPASS, 1, 0).setName("&bOngoing Matches");
 
         discordSkull.setCustomSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGQ0MjMzN2JlMGJkY2EyMTI4MDk3ZjFjNWJiMTEwOWU1YzYzM2MxNzkyNmFmNWZiNmZjMjAwMDAwMTFhZWI1MyJ9fX0=");
         githubSkull.setCustomSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjZlMjdkYTEyODE5YThiMDUzZGEwY2MyYjYyZGVjNGNkYTkxZGU2ZWVlYzIxY2NmM2JmZTZkZDhkNDQzNmE3In19fQ==");
@@ -37,8 +42,11 @@ public class InfoMenu {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7My &fGitHub &7page &8»&f https://github.com/Lickem1"));
             player.closeInventory();
         }));
-        menu.set(40, updateLogs.build(), ((player, type, slot) -> DynamicManager.get(UpdateLogMenu.class).open(player)));
+        menu.set(39, updateLogs.build(), ((player, type, slot) -> DynamicManager.get(UpdateLogMenu.class).open(player)));
+        menu.set(41, ongoingMatches.build(), ((player, type, slot) -> new OngoingMatchMenu(player)));
         fillGlass();
+
+        runTaskTimerAsynchronously(Plugin.getInstance(), 3*20, 3*20);
     }
 
     public void open(Player player) {
@@ -53,5 +61,18 @@ public class InfoMenu {
         for (int i : slots) {
             menu.set(i, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 15).setName(" ").build(), null);
         }
+    }
+
+    @Override
+    public void run() {
+        int amount = GlobalGame.getAllGameData(Plugin.getInstance().getRedisManager()).size();
+        ItemBuilder ongoingMatches = new ItemBuilder(Material.COMPASS, (amount == 0 ? 1 : amount), 0).setName("&bOngoing Matches &7(" + amount + ")").setLore(" &b* &fClick to view all ongoing games!");
+
+        menu.set(41, ongoingMatches.build(), ((player, type, slot) -> {
+            if(GlobalGame.getAllGameData(Plugin.getInstance().getRedisManager()).size() != 0) {
+                new OngoingMatchMenu(player);
+            } else player.sendMessage(ChatColor.RED + "No games available");
+        }));
+
     }
 }

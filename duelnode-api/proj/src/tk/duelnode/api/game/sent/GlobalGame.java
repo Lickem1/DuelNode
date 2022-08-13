@@ -2,9 +2,6 @@ package tk.duelnode.api.game.sent;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import tk.duelnode.api.API;
 import tk.duelnode.api.util.redis.RedisManager;
 
@@ -16,48 +13,65 @@ import java.util.UUID;
 public class GlobalGame {
 
     private final UUID gameID = UUID.randomUUID();
-    private final List<UUID> team1 = new ArrayList<>();
-    private final List<UUID> team2 = new ArrayList<>();
-    private final List<UUID> spectators = new ArrayList<>();
+    private final List<GlobalGamePlayer> team1 = new ArrayList<>();
+    private final List<GlobalGamePlayer> team2 = new ArrayList<>();
+    private final List<GlobalGamePlayer> spectators = new ArrayList<>();
     private final GlobalGameType gameType;
     @Setter
     private String arenaID;
+    @Setter
+    private String gameServer;
 
     public GlobalGame(GlobalGameType gameType) {
         this.gameType = gameType;
     }
 
-    public void addTeam1(UUID uuid) {
-        team1.add(uuid);
+    public void addTeam1(GlobalGamePlayer format) {
+        team1.add(format);
     }
 
-    public void addTeam2(UUID uuid) {
-        team2.add(uuid);
+    public void addTeam2(GlobalGamePlayer format) {
+        team2.add(format);
     }
 
-    public void addSpectator(UUID uuid) {
-        spectators.add(uuid);
+    public void addSpectator(GlobalGamePlayer format) {
+        spectators.add(format);
     }
 
-    public void sendMessage(String message) {
-        List<UUID> list = new ArrayList<>();
-        list.addAll(team1);
-        list.addAll(team2);
-        list.addAll(spectators);
+    public boolean isInGame(UUID gamePlayer) {
+        List<GlobalGamePlayer> gamePlayers = new ArrayList<>();
+        gamePlayers.addAll(team1);
+        gamePlayers.addAll(team2);
+        gamePlayers.addAll(spectators);
 
-        list.removeIf(uuid -> Bukkit.getServer().getPlayer(uuid) == null);
-        for (UUID uuid : list) {
-            Player p = Bukkit.getServer().getPlayer(uuid);
-            p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-        }
+        int entries = 0;
+        for(GlobalGamePlayer gp : gamePlayers) if(gp.getUuid().equals(gamePlayer)) entries++;
+
+        return (entries == 1);
     }
 
-    public boolean isInGame(UUID uuid) {
-        List<UUID> list = new ArrayList<>();
-        list.addAll(team1);
-        list.addAll(team2);
-        list.addAll(spectators);
-        return list.contains(uuid);
+    public boolean containsTeam1(UUID uuid) {
+        int entries = 0;
+        for(GlobalGamePlayer gp : team1) if(gp.getUuid().equals(uuid)) entries++;
+        return (entries == 1);
+    }
+
+    public boolean containsTeam2(UUID uuid) {
+        int entries = 0;
+        for(GlobalGamePlayer gp : team2) if(gp.getUuid().equals(uuid)) entries++;
+        return (entries == 1);
+    }
+
+    public boolean containsSpectator(UUID uuid) {
+        int entries = 0;
+        for(GlobalGamePlayer gp : spectators) if(gp.getUuid().equals(uuid)) entries++;
+        return (entries == 1);
+    }
+
+    public void removeSpectator(UUID uuid) {
+        GlobalGamePlayer g = null;
+        for(GlobalGamePlayer gp : spectators) if(gp.getUuid().equals(uuid)) g = gp;
+        spectators.remove(g);
     }
 
     public boolean post(String gameID, RedisManager redis) {
@@ -78,18 +92,18 @@ public class GlobalGame {
         }
     }
 
-    public boolean message(String gameServer, RedisManager redis) {
+    public boolean message(GameCondition condition, RedisManager redis) {
         try {
-            redis.getRedisConnection().async().publish("dn/server/gameserver/" + gameServer, API.getGson().toJson(this));
+            redis.getRedisConnection().async().publish("dn/server/gameserver/" + gameServer, condition.toString() + "|" +API.getGson().toJson(this));
             return true;
         } catch (Exception e) {
             return false;
         }
     }
 
-    public static GlobalGame getGameData(String gameServer, RedisManager redis) {
+    public static GlobalGame getGameData(String gameData, RedisManager redis) {
         try {
-            String string = redis.getRedisConnection().async().get("dn/server/gameserver/" + gameServer).get();
+            String string = redis.getRedisConnection().async().get("dn/gamedata/" + gameData).get();
 
             return API.getGson().fromJson(string, GlobalGame.class);
         } catch (Exception e) {
@@ -97,10 +111,10 @@ public class GlobalGame {
         }
     }
 
-    public static List<GlobalGame> getAllGameData(String gameServer, RedisManager redis) {
+    public static List<GlobalGame> getAllGameData(RedisManager redis) {
         List<GlobalGame> globalGameList = new ArrayList<>();
         try {
-            List<String> string = redis.getRedisConnection().async().keys("dn/server/gameserver/*").get();
+            List<String> string = redis.getRedisConnection().async().keys("dn/gamedata/*").get();
 
             for(String s : string) {
                 GlobalGame game = API.getGson().fromJson(redis.getRedisConnection().async().get(s).get(), GlobalGame.class);

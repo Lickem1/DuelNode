@@ -1,24 +1,25 @@
 package tk.duelnode.gameserver.listener;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import tk.duelnode.api.API;
 import tk.duelnode.api.game.sent.GlobalGame;
 import tk.duelnode.api.util.menu.MenuHolder;
 import tk.duelnode.api.util.packet.ClassType;
+import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.gameserver.data.game.LocalGame;
 import tk.duelnode.gameserver.data.game.impl.GameLogic;
 import tk.duelnode.gameserver.data.player.PlayerData;
@@ -40,21 +41,21 @@ public class PlayerListener extends DynamicListener {
         PlayerData data = playerDataManager.getProfile(e.getUniqueId());
         GameManager gameManager = DynamicManager.get(GameManager.class);
 
-        LocalGame game = gameManager.isInGame(data.getUuid());
         if(gameManager.isInGame(data.getUuid()) != null) {
+            LocalGame game = gameManager.isInGame(data.getUuid());
             data.setGame(game);
 
             GlobalGame globalGame = game.getGlobalGame();
 
-            if(globalGame.getTeam1().contains(data.getUuid())) {
+            if(globalGame.containsTeam1(data.getUuid())) {
                 game.getPlayersAlive().add(data);
                 game.getTeam1().add(data);
             }
-            else if(globalGame.getTeam2().contains(data.getUuid())) {
+            else if(globalGame.containsTeam2(data.getUuid())) {
                 game.getPlayersAlive().add(data);
                 game.getTeam2().add(data);
             }
-            else if(globalGame.getSpectators().contains(data.getUuid())) game.getSpectators().add(data);
+            else if(globalGame.containsSpectator(data.getUuid())) game.getSpectators().add(data);
 
         } else System.out.println("null"); // kick player
     }
@@ -86,33 +87,65 @@ public class PlayerListener extends DynamicListener {
         if(e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             PlayerData data = playerDataManager.getProfile(p);
-            if(data.getGame() != null && (!(data.getGame().getGameTick() instanceof GameLogic))) {
+            if(data.getGame() != null && (!(data.getGame().getGameTick() instanceof GameLogic)) && data.getGame().isSpectator(data)) {
                 e.setCancelled(true);
             }
         }
     }
 
     @EventHandler
-    public void pickup(PlayerAttemptPickupItemEvent e) {
+    public void damage(EntityDamageByEntityEvent e) {
+        if(e.getDamager() instanceof Player) {
+            Player p = (Player) e.getDamager();
+            PlayerData data = playerDataManager.getProfile(p);
+            if(data.getGame() != null && data.getGame().isSpectator(data)) e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void pickup(PlayerPickupItemEvent e) {
+        Player p = e.getPlayer();
+        PlayerData data = playerDataManager.getProfile(p);
+
+        if(data != null && data.getGame() != null && data.getGame().getGameTick() instanceof GameLogic) {
+            LocalGame game = data.getGame();
+            if(!game.isAlive(data) || game.isSpectator(data)) {
+                e.setCancelled(true);
+            }
+        } else e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void dropItem(PlayerDropItemEvent e) {
         Player p = e.getPlayer();
         PlayerData data = playerDataManager.getProfile(p);
 
         if(data != null && data.getGame() != null) {
             LocalGame game = data.getGame();
-
-            if(!game.isAlive(data) && (!(game.getGameTick() instanceof GameLogic))) {
-                e.setCancelled(true);
-            }
+            if(game.isSpectator(data)) e.setCancelled(true);
 
         } else e.setCancelled(true);
     }
 
     @EventHandler
     public void join(PlayerJoinEvent e) {
-        PlayerData data = DynamicManager.get(PlayerDataManager.class).getProfile(e.getPlayer());
-        data.setPlayer(e.getPlayer());
-        data.setName(e.getPlayer().getName());
+        Player p = e.getPlayer();
+        PlayerData data = DynamicManager.get(PlayerDataManager.class).getProfile(p);
+        data.setPlayer(p);
+        data.setName(p.getName());
         e.setJoinMessage(null);
+
+        if(data.getGame() != null && data.getGame().isSpectator(data)) {
+            LocalGame game = data.getGame();
+            game.sendMessage("&b * &f&o" + e.getPlayer().getName() + "&7&o is now spectating your game");
+
+            data.setSpectator();
+            for(PlayerData players : game.getAllPlayers()) {
+                if(players != data) {
+                    players.getPlayer().hidePlayer(GameServer.getInstance(), p);
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -147,6 +180,31 @@ public class PlayerListener extends DynamicListener {
             Location location = new Location(Bukkit.getServer().getWorld(data[4]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]), 0, 0);
             player.sendMessage("§7Teleportation to arena " + data[0]);
             player.teleport(location);
+        }
+    }
+
+    @EventHandler
+    public void inventory(InventoryClickEvent e) {
+        if(!(e.getWhoClicked() instanceof Player)) return;
+        Player p = (Player) e.getWhoClicked();
+        PlayerData data = playerDataManager.getProfile(p);
+
+        if(data.getGame() != null && data.getGame().isSpectator(data)) e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        Action a = e.getAction();
+        if(a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK || e.getItem() == null || e.getItem().getType() == Material.AIR)
+            return;
+        Player p = e.getPlayer();
+        PlayerData data = playerDataManager.getProfile(p);
+
+        if(data.getGame() != null && data.getGame().isSpectator(data)) {
+            if(e.getItem().getType() == Material.REDSTONE_TORCH_ON) {
+                p.sendMessage(ChatColor.GRAY + "Sending you back to lobby...");
+                GameServer.getInstance().sendToLobby(p);
+            }
         }
     }
 }

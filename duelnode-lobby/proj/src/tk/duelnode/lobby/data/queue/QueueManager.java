@@ -5,7 +5,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import tk.duelnode.api.game.sent.GameCondition;
 import tk.duelnode.api.game.sent.GlobalGame;
+import tk.duelnode.api.game.sent.GlobalGamePlayer;
 import tk.duelnode.api.game.sent.GlobalGameType;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.Plugin;
@@ -46,25 +48,27 @@ public class QueueManager extends BukkitRunnable {
             PlayerData data2 = queue.get(1);
 
             GlobalGame gD = new GlobalGame(GlobalGameType.DUEL);
-            gD.addTeam1(data.getUUID());
-            gD.addTeam2(data2.getUUID());
+            gD.setGameServer("na-mini-01");
+            gD.addTeam1(new GlobalGamePlayer(data.getPlayer().getName(), data.getPlayer().getUniqueId()));
+            gD.addTeam2(new GlobalGamePlayer(data2.getPlayer().getName(), data2.getPlayer().getUniqueId()));
 
             data.createLobbyPlayer();
             data2.createLobbyPlayer();
             data.getPlayer().getInventory().clear();
             data2.getPlayer().getInventory().clear();
 
-            gD.sendMessage("&7Match found, please allow a few seconds to commence...");
+            data.getPlayer().sendMessage(ChatColor.GRAY + "Match found, please allow a few seconds to commence...");
+            data2.getPlayer().sendMessage(ChatColor.GRAY + "Match found, please allow a few seconds to commence...");
             //gD.sendMessage("&cUnable to start match");
 
-            gD.message("na-mini-01", Plugin.getInstance().getRedisManager());
+            gD.message(GameCondition.CREATE, Plugin.getInstance().getRedisManager());
 
             // todo send to gameserver then send players to that server
             Bukkit.getServer().getScheduler().runTaskLater(Plugin.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    Plugin.getInstance().sendToGameServer(data.getPlayer());
-                    Plugin.getInstance().sendToGameServer(data2.getPlayer());
+                    Plugin.getInstance().sendToGameServer(gD.getGameServer(), data.getPlayer());
+                    Plugin.getInstance().sendToGameServer(gD.getGameServer(), data2.getPlayer());
                 }
             }, 2*20L);
         }

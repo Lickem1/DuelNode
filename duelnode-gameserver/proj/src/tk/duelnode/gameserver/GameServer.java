@@ -16,7 +16,6 @@ import tk.duelnode.gameserver.data.world.chunk.NMSChunk;
 import tk.duelnode.gameserver.manager.DynamicManager;
 import tk.duelnode.gameserver.manager.ScoreboardAdapter;
 
-
 @Getter
 public class GameServer extends JavaPlugin implements PluginMessageListener {
 
@@ -27,13 +26,15 @@ public class GameServer extends JavaPlugin implements PluginMessageListener {
     @Override
     public void onEnable() {
         instance = this;
+        this.saveDefaultConfig();
+
         new Plasma(this, new ScoreboardAdapter());
         new MenuListener(this);
         for(World worlds : Bukkit.getWorlds()) new NMSChunk(worlds);
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
-        RedisClient client = RedisClient.create("redis://yourmom@" + "localhost" + ":" + "6379");
-        this.redisManager = new RedisManager(client, "yourmom");
+        RedisClient client = RedisClient.create("redis://" + getConfig().getString("redis.auth") + "@" + getConfig().getString("redis.host")+ ":" + getConfig().getInt("redis.port"));
+        this.redisManager = new RedisManager(client, getConfig().getString("redis.auth"));
 
         if(!getDataFolder().exists()) getDataFolder().mkdirs();
 
