@@ -22,8 +22,8 @@ public class ChatListener extends DynamicListener {
         ArenaManager arenaManager = DynamicManager.get(ArenaManager.class);
         String format = ChatColor.GRAY + "[%s"+ ChatColor.GRAY + "] %s" + p.getName() + ChatColor.GRAY + ": " + ChatColor.WHITE + e.getMessage();
 
-        if(p.getName().equalsIgnoreCase("Lickem")) format = String.format(format, ChatColor.YELLOW + "Dev", ChatColor.GOLD);
-        else format = String.format(format, ChatColor.WHITE + "Member", ChatColor.GRAY);
+        if(p.getName().equalsIgnoreCase("Lickem")) format = String.format(format, ChatColor.DARK_AQUA + "Dev", ChatColor.AQUA);
+        else format = String.format(format, ChatColor.WHITE + "Member", ChatColor.GRAY.toString() + ChatColor.ITALIC);
 
 
         if(e.getMessage().equalsIgnoreCase("paste")) {

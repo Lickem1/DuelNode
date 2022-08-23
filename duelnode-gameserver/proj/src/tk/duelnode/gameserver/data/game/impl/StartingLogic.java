@@ -4,6 +4,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
+import tk.duelnode.api.game.data.GlobalGameState;
+import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.gameserver.data.game.LocalGame;
 import tk.duelnode.gameserver.data.game.LocalGameTick;
 import tk.duelnode.gameserver.data.game.LocalGameType;
@@ -37,8 +39,9 @@ public class StartingLogic implements LocalGameTick {
                     player.getPlayer().getInventory().setLeggings(new ItemStack(Material.CHAINMAIL_LEGGINGS, 1));
                     player.getPlayer().getInventory().setBoots(new ItemStack(Material.CHAINMAIL_BOOTS, 1));
                     player.getPlayer().getInventory().setItem(0, new ItemStack(Material.IRON_SWORD, 1));
-                    player.getPlayer().getInventory().setItem(1, new ItemStack(Material.FISHING_ROD, 1));
-                    player.getPlayer().getInventory().setItem(2, new ItemStack(Material.BOW, 1));
+                    player.getPlayer().getInventory().setItem(1, new ItemStack(Material.BOW, 1));
+                    player.getPlayer().getInventory().setItem(2, new ItemStack(Material.WOOD, 64));
+                    player.getPlayer().getInventory().setItem(6, new ItemStack(Material.GOLDEN_APPLE, 4));
                     player.getPlayer().getInventory().setItem(7, new ItemStack(Material.COOKED_BEEF, 16));
                     player.getPlayer().getInventory().setItem(8, new ItemStack(Material.ARROW, 16));
                     player.getPlayer().getInventory().setItemInOffHand(new ItemStack(Material.SHIELD, 1));
@@ -46,7 +49,9 @@ public class StartingLogic implements LocalGameTick {
                     player.getPlayer().teleport(game.getPlayerSpawn(player));
                 }
                 game.sendMessage(ChatColor.GREEN + "GO! " + ChatColor.GRAY.toString() + ChatColor.ITALIC + "Good luck and have fun!");
-                game.setGameTick(new GameLogic()); // todo game logic
+                game.getGlobalGame().setGameState(GlobalGameState.ONGOING);
+                game.getGlobalGame().post(game.getID().toString(), GameServer.getInstance().getRedisManager());
+                game.setGameTick(new GameLogic());
             } else {
 
                 if(countdown == 5) {
@@ -54,7 +59,7 @@ public class StartingLogic implements LocalGameTick {
                         game.sendMessage(
                                 "",
                                 "&bStarting match &f" + game.getTeam1().get(0).getName() + " vs " + game.getTeam2().get(0).getName(),
-                                "&bArena:&f " + game.getArena().getDisplayName(), "&bServer:&f Ashburn, Virginia");
+                                "&bArena:&f " + game.getArena().getDisplayName(), "&bServer:&f " + GameServer.getInstance().getConfig().getString("server-location"));
                     }
                 }
                 String message = colors[(countdown-1)].toString() + countdown +"...";
@@ -67,7 +72,7 @@ public class StartingLogic implements LocalGameTick {
             }
         } else {
 
-            if(waiting_time >= 10) { // wait for other player for 10 secs before cancelling game
+            if(waiting_time >= 5) { // wait for other player for 10 secs before cancelling game
                 game.cancel();
             } else {
                 for(PlayerData player : game.getAllPlayers()) {

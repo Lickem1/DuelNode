@@ -31,6 +31,7 @@ public class UpdateLogMenu {
             List<String> lore = new ArrayList<>();
 
             lore.add(ChatColor.translateAlternateColorCodes('&', "&7Commit Date: &b" + update.getDate()));
+            lore.add(ChatColor.translateAlternateColorCodes('&', "&7Project Version: &b" + update.getVersion()));
             lore.add(" ");
             for(String string : update.getLore()) lore.add(ChatColor.translateAlternateColorCodes('&', string));
 
@@ -96,14 +97,14 @@ public class UpdateLogMenu {
     @AllArgsConstructor
     public enum Update {
 
-        LOG_1("Log #1", "Jul 26, 2022 @ 5:46PM EST", new String[]{
+        LOG_1("Log #1", "Jul 26, 2022 @ 5:46PM EST", "1.0.0-alpha", new String[]{
                 "&bCommit ID:&f 54bff06bc81372c2c19b066fcb19b136786fef31",
                 "&7 ",
                 "&7Just an initial commit, setting up main project for spigot implementation.",
                 "&7Getting maven and the project setup for further development.",
         }),
 
-        LOG_2("Log #2", "Jul 26, 2022 @ 11:38PM EST", new String[]{
+        LOG_2("Log #2", "Jul 26, 2022 @ 11:38PM EST", "1.1.0-alpha", new String[]{
                 "&bCommit ID:&f e6a4c0d3325a4d950fbfec32844326e9369d9a0c",
                 "&7 ",
                 "&7Main focus in this push is for the lobby, getting things",
@@ -112,7 +113,7 @@ public class UpdateLogMenu {
                 "&7chunks from generating) :D"
         }),
 
-        LOG_3("Log #3", "Jul 27, 2022 @ 1:05PM EST", new String[]{
+        LOG_3("Log #3", "Jul 27, 2022 @ 1:05PM EST", "1.2.0-alpha",new String[]{
                 "&bCommit ID:&f 0f27022be509a2e7b60affe4c448dcb579c99e88",
                 "&7 ",
                 "&7Some more work done on the lobby portion. Again, making things look",
@@ -123,7 +124,7 @@ public class UpdateLogMenu {
                 "&7I noticed a small bug when you'd jump off the map, that is now fixed."
         }),
 
-        LOG_4("Log #4", "Jul 28, 2022 @ 1:04PM EST", new String[]{
+        LOG_4("Log #4", "Jul 28, 2022 @ 1:04PM EST", "1.3.0-alpha",new String[]{
                 "&bCommit ID:&f b15205db26f7c0c92c98df2486f9cdaef11b114f",
                 "&7 ",
                 "&7AGAIN, some more work done on the lobby portion, hopefully this upcoming",
@@ -131,7 +132,7 @@ public class UpdateLogMenu {
                 "&7cross-server communication and duel creation (See game server for more)"
         }),
 
-        LOG_5("Log #5", "Jul 29, 2022 @ 1:30AM EST", new String[]{
+        LOG_5("Log #5", "Jul 29, 2022 @ 1:30AM EST", "1.4.1-alpha",new String[]{
                 "&bCommit ID:",
                 "&7 - &f168a694a90595a27c378490e7ca3b5f02c733424",
                 "&7 - &f094e615e8aae28657028d6f8ff3e3cf00d5c01f7",
@@ -141,14 +142,14 @@ public class UpdateLogMenu {
                 "&7cross-server communication and duel creation (See gameserver for more)"
         }),
 
-        LOG_6("Log #6", "Jul 30, 2022 @ 11:04AM EST", new String[]{
+        LOG_6("Log #6", "Jul 30, 2022 @ 11:04AM EST", "1.5.1-alpha",new String[]{
                 "&bCommit ID:&f 71d7a3100c872a7275e5b51d16df7810ddcaf308",
                 "&7 ",
                 "&7Implemented basic queue system",
                 "&7Starting development on the game server portion."
         }),
 
-        LOG_7("Log #7", "Jul 30, 2022 @ 11:08PM EST", new String[]{
+        LOG_7("Log #7", "Jul 30, 2022 @ 11:08PM EST", "1.6.1-alpha",new String[]{
             "&bCommit ID:&f 8ca2a07f2f40a68f4eb012345210a71e957630db",
                     "&7 ",
                     "&7Loads of work done on the game server portion",
@@ -160,7 +161,7 @@ public class UpdateLogMenu {
                     "&7A minor, but annoying bug within the chunk generation where it doesn't update light sources"
         }),
 
-        LOG_8("Log #8", "Aug 3, 2022 @ 5:37PM EST", new String[]{
+        LOG_8("Log #8", "Aug 3, 2022 @ 5:37PM EST", "1.7.1-alpha",new String[]{
                 "&bCommit ID:&f 70f61a4ca27c5cfa0603a35238d79a4de69652be",
                 "&7 ",
                 "&7Done some more work on the game server portion",
@@ -168,7 +169,7 @@ public class UpdateLogMenu {
                 "&7Also creating a global game system to view/manage active games from other locations (servers)"
         }),
 
-        LOG_9("Log #9", "Aug 6, 2022 @ 11:22PM EST", new String[]{
+        LOG_9("Log #9", "Aug 6, 2022 @ 11:22PM EST", "1.8.1-alpha",new String[]{
                 "&bCommit ID:&f 4258c48ccfd1220d44ef8ecb34569611351fb675",
                 "&7 ",
                 "&7Done some more work on the game server portion",
@@ -177,17 +178,28 @@ public class UpdateLogMenu {
                 "&7using an integer as a priority key",
         }),
 
-        LOG_10("Log #10", "Aug 7, 2022 @ 9:57PM EST", new String[]{
+        LOG_10("Log #10", "Aug 7, 2022 @ 9:57PM EST", "1.9.1-beta",new String[]{
                 "&bCommit ID:&f 050231ec186653f2edf0b6539f89e1f6fa8da391",
                 "&7 ",
                 "&7Everything works!",
                 "&7Project is very close to completion! Just need to do a few testings (not sure how to find people lol)",
                 "&7Implemented bungeecord server linking to send players to the (one) game server!!",
                 "&7Could add multiple gameserver functionality but this isn't a project that should be used in production!"
+        }),
+
+        LOG_11("Log #11", "Aug 12, 2022 @ 8:20PM EST", "2.0.1-beta",new String[]{
+                "&bCommit ID:&f 9404124485133637c3ce3ff9122cae7af55a69e4",
+                "&7 ",
+                "&7Everything works!",
+                "&7Project is pretty much done! Obviously gonna need testing but pretty much finished",
+                "&7Implemented bungeecord server linking to send players to the (one) game server!!",
+                "&7Implemented cross-server ongoing match viewer! (Look inside the book :D)",
+                "&7Implemented cross-server spectator functionality!! This one was kinda tricky but did it no problem!",
+                "&7Again, not sure if I'm gonna add to this anymore as it's only for shits and giggles but oh well, here ya go!"
         });
 
 
-        private final String name, date;
+        private final String name, date, version;
         private final String[] lore;
     }
 }

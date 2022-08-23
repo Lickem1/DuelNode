@@ -6,6 +6,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.scheduler.BukkitRunnable;
+import tk.duelnode.api.API;
 import tk.duelnode.api.util.menu.MenuBuilder;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.gameserver.GameServer;
@@ -24,7 +25,7 @@ public class GameServerMenu extends BukkitRunnable {
     private final ItemBuilder unavailable = new ItemBuilder(Material.WOOL, 1, 14).setLore("&7Click to view unavailable arenas!");
 
     public GameServerMenu() {
-        ItemBuilder netherStar = new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("Placeholder 1");
+        ItemBuilder netherStar = new ItemBuilder(Material.NETHER_STAR, 1, 0).setName("&f&lDuel&e&lNode &fv" + API.getVersion()).setLore("&7Developed by Lickem");
         menu.set(4, netherStar.build(), null);
 
         int[] slots = {0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 16, 17, 18, 26, 27, 28, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};

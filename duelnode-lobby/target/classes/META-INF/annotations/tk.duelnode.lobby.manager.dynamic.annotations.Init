@@ -1,4 +1,3 @@
-tk.duelnode.lobby.data.menu.GameServerMenu
 tk.duelnode.lobby.data.menu.info.InfoMenu
 tk.duelnode.lobby.data.menu.info.UpdateLogMenu
 tk.duelnode.lobby.data.player.VoidSpawnHandler

@@ -1,10 +1,11 @@
 package tk.duelnode.gameserver.manager.game;
 
+import lombok.Getter;
 import org.bukkit.scheduler.BukkitRunnable;
 import tk.duelnode.api.game.arena.Arena;
 import tk.duelnode.api.game.arena.ArenaState;
-import tk.duelnode.api.game.sent.GlobalGame;
-import tk.duelnode.api.game.sent.GlobalGamePlayer;
+import tk.duelnode.api.game.data.GlobalGame;
+import tk.duelnode.api.game.data.GlobalGameState;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.gameserver.data.game.LocalGame;
@@ -17,6 +18,7 @@ import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Getter
 @Init(classType = ClassType.CONSTRUCT)
 public class GameManager extends BukkitRunnable {
 
@@ -45,6 +47,8 @@ public class GameManager extends BukkitRunnable {
 
         // global stuff
         globalGame.setArenaID(arena.getDisplayName());
+        globalGame.setGameState(GlobalGameState.STARTING);
+        globalGame.setGameServerLocation(GameServer.getInstance().getConfig().getString("server-location"));
 
         //local stuff
         localGame.setArena(arena);
@@ -61,6 +65,7 @@ public class GameManager extends BukkitRunnable {
         ArenaManager arenaManager = DynamicManager.get(ArenaManager.class);
 
         //arena stuff
+        arenaManager.rollBackArena(localGame);
         arenaManager.setArenaState(localGame.getArena(), ArenaState.AVAILABLE);
 
         // finalize stuff

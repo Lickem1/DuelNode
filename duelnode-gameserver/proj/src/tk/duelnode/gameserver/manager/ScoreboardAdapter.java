@@ -10,52 +10,60 @@ import tk.duelnode.gameserver.data.game.impl.GameLogic;
 import tk.duelnode.gameserver.data.game.impl.StartingLogic;
 import tk.duelnode.gameserver.data.player.PlayerData;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class ScoreboardAdapter implements PlasmaAdapter {
 
-    private int tick = 0;
-
     @Override
     public String getTitle(Player player) {
-        String newTitle = "";
+        PlayerData data = DynamicManager.get(PlayerDataManager.class).getProfile(player);
+        if(data == null) return "";
+        String newTitle;
 
-        if (tick >= 9 * 5) {
-            tick = 0;
+        if (data.scoreboard_title_tick >= 9 * 5) {
+            data.scoreboard_title_tick = 0;
             newTitle = "%s%s%sDUEL &7* " + Bukkit.getServerName();
 
-        } else if (tick <= 5) {
+        } else if (data.scoreboard_title_tick <= 5) {
             newTitle = "%s%sD%sUEL &7* " + Bukkit.getServerName();
-        } else if (tick <= 2 * 5) {
+        } else if (data.scoreboard_title_tick <= 2 * 5) {
             newTitle = "%sD%sU%sEL &7* " + Bukkit.getServerName();
-        } else if (tick <= 3 * 5) {
+        } else if (data.scoreboard_title_tick <= 3 * 5) {
             newTitle = "%sDU%sE%sL &7* " + Bukkit.getServerName();
-        } else if (tick <= 4 * 5) {
+        } else if (data.scoreboard_title_tick <= 4 * 5) {
             newTitle = "%sDUE%sL%s &7* " + Bukkit.getServerName();
-        } else if (tick <= 5 * 5) {
-            newTitle = "&e&lDUEL &7* " + Bukkit.getServerName();
-        } else if (tick <= 6 * 5) {
+        } else if (data.scoreboard_title_tick <= 5 * 5) {
+            newTitle = "&b&lDUEL &7* " + Bukkit.getServerName();
+        } else if (data.scoreboard_title_tick <= 6 * 5) {
             newTitle = "&f&lDUEL &7* " + Bukkit.getServerName();
-        } else if (tick <= 7 * 5) {
-            newTitle = "&e&lDUEL &7* " + Bukkit.getServerName();
-        } else if (tick <= 8 * 5) {
+        } else if (data.scoreboard_title_tick <= 7 * 5) {
+            newTitle = "&b&lDUEL &7* " + Bukkit.getServerName();
+        } else if (data.scoreboard_title_tick <= 8 * 5) {
             newTitle = "%s%s%sDUEL &7* " + Bukkit.getServerName();
         } else {
             newTitle = "%s%s%sDUEL &7* " + Bukkit.getServerName();
 
         }
-        tick++;
+        data.scoreboard_title_tick++;
 
-        return String.format(newTitle, "&f&l", "&e&l", "&f&l");
+        return String.format(newTitle, "&f&l", "&b&l", "&f&l");
     }
 
     @Override
     public List<String> getLines(Player player) {
         PlayerData data = DynamicManager.get(PlayerDataManager.class).getProfile(player);
         List<String> s = new ArrayList<>();
+        Date now = new Date(System.currentTimeMillis());
+        SimpleDateFormat day = new SimpleDateFormat("MM/dd/yy");
+        SimpleDateFormat time = new SimpleDateFormat("h:mmaa");
+
         s.add("&7&m------------------");
+        s.add("&8" + day.format(now) + " &7" + time.format(now).toLowerCase());
+        s.add(" ");
         if(data.getGame() != null) {
             LocalGame game = data.getGame();
 
@@ -76,7 +84,7 @@ public class ScoreboardAdapter implements PlasmaAdapter {
 
                         String[] format = {
                                 "&f&o" + p1.getName() + " vs " + p2.getName(),
-                                "&eDuration: &f" + ((GameLogic) game.getGameTick()).getGameTime(),
+                                "&eDuration: &f" + ((GameLogic) game.getGameTick()).getFormattedDuration(),
                                 "&bArena: &f" + game.getArena().getDisplayName(),
                                 " ",
                                 "&7You are currently spectating",
@@ -89,7 +97,7 @@ public class ScoreboardAdapter implements PlasmaAdapter {
 
                         String[] format = {
                                 "&cOpponent: &f" + (game.getTeam1().contains(data) ? p2.getName() : p1.getName()),
-                                "&eDuration: &f" + ((GameLogic) game.getGameTick()).getGameTime(),
+                                "&eDuration: &f" + ((GameLogic) game.getGameTick()).getFormattedDuration(),
                                 "&bArena: &f" + game.getArena().getDisplayName(),
                                 " ",
                                 "&fTheir Ping: &a" + (game.getTeam1().contains(data) ? p2.getPlayer().spigot().getPing() : p1.getPlayer().spigot().getPing()) + "ms",
@@ -103,7 +111,7 @@ public class ScoreboardAdapter implements PlasmaAdapter {
 
                 if(game.getGameType() == LocalGameType.DUEL) {
                     FinishLogic finishLogic = (FinishLogic) game.getGameTick();
-                    if(finishLogic.getFinalTime().equalsIgnoreCase("00:00")) {
+                    if(game.isCancelled()) {
                         s.add("Game cancelled");
                     } else {
                         PlayerData p1 = game.getPlayersAlive().get(0);
@@ -146,6 +154,7 @@ public class ScoreboardAdapter implements PlasmaAdapter {
             s.add("    * " + tps.toString());
         }
         s.add("");
+        s.add("&bLickem#9444");
         s.add("&7&m------------------");
 
         return s;

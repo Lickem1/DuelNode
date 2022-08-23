@@ -14,10 +14,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
-import tk.duelnode.api.game.sent.GameCondition;
-import tk.duelnode.api.game.sent.GlobalGame;
-import tk.duelnode.api.game.sent.GlobalGamePlayer;
-import tk.duelnode.api.game.sent.GlobalGameType;
+import tk.duelnode.api.game.data.*;
 import tk.duelnode.api.util.menu.MenuHolder;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.Plugin;
@@ -29,8 +26,7 @@ import tk.duelnode.lobby.manager.PlayerDataManager;
 import tk.duelnode.lobby.manager.dynamic.DynamicListener;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
 
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Init(classType = ClassType.CONSTRUCT)
 public class PlayerListener extends DynamicListener {
@@ -112,8 +108,8 @@ public class PlayerListener extends DynamicListener {
         e.setCancelled(true);
         String format = ChatColor.GRAY + "[%s"+ ChatColor.GRAY + "] %s" + p.getName() + ChatColor.GRAY + ": " + ChatColor.WHITE + e.getMessage();
 
-        if(p.getName().equalsIgnoreCase("Lickem")) format = String.format(format, ChatColor.YELLOW + "Dev", ChatColor.GOLD);
-        else format = String.format(format, ChatColor.WHITE + "Member", ChatColor.GRAY);
+        if(p.getName().equalsIgnoreCase("Lickem")) format = String.format(format, ChatColor.DARK_AQUA + "Dev", ChatColor.AQUA);
+        else format = String.format(format, ChatColor.WHITE + "Member", ChatColor.GRAY.toString() + ChatColor.ITALIC);
 
         if(e.getMessage().equalsIgnoreCase("test_games")) {
 
@@ -125,7 +121,8 @@ public class PlayerListener extends DynamicListener {
 
                 gD.message(GameCondition.CREATE, Plugin.getInstance().getRedisManager());
             }
-            p.sendMessage(ChatColor.GRAY + "Creating duels");
+            p.sendMessage(ChatColor.GRAY + "Creating fake duels");
+
         } else Plugin.getInstance().getRedisManager().publish("dn/server/gameserver-chat", format);
     }
 
@@ -139,18 +136,27 @@ public class PlayerListener extends DynamicListener {
         net.minecraft.server.v1_12_R1.ItemStack stack = CraftItemStack.asNMSCopy(e.getCurrentItem());
         if(stack == null) return;
 
-        String result = stack.getTag().getString("game-id");
-        if(result == null || result.isEmpty()) return;
+        String game_id = stack.getTag().getString("game-id");
+        String server_id = stack.getTag().getString("server-id");
 
-        GlobalGame game = GlobalGame.getGameData(result, Plugin.getInstance().getRedisManager());
-        if(game == null) return;
+        if(game_id != null && !game_id.isEmpty()) {
+            GlobalGame game = GlobalGame.getGameData(game_id, Plugin.getInstance().getRedisManager());
+            if(game == null) return;
+            if(game.getGameState() == GlobalGameState.FINISHED) return;
 
-        game.addSpectator(new GlobalGamePlayer(p.getName(), p.getUniqueId()));
-        game.post(game.getGameID().toString(), Plugin.getInstance().getRedisManager());
-        game.message(GameCondition.UPDATE, Plugin.getInstance().getRedisManager());
-        p.closeInventory();
-        p.sendMessage(ChatColor.GRAY + "Please wait...");
+            game.addSpectator(new GlobalGamePlayer(p.getName(), p.getUniqueId()));
+            game.post(game.getGameID().toString(), Plugin.getInstance().getRedisManager());
+            game.message(GameCondition.UPDATE, Plugin.getInstance().getRedisManager());
+            p.closeInventory();
+            p.sendMessage(ChatColor.GRAY + "Please wait...");
 
-        Plugin.getInstance().sendToGameServer(game.getGameServer(), p);
+            Plugin.getInstance().sendToGameServer(game.getGameServer(), p);
+
+        }
+        else if(server_id != null && !server_id.isEmpty()) {
+            p.closeInventory();
+            p.sendMessage(ChatColor.GRAY + "Please wait...");
+            Plugin.getInstance().sendToGameServer(server_id, p);
+        }
     }
 }

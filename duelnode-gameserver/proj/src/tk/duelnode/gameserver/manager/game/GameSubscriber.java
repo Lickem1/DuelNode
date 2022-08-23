@@ -3,8 +3,8 @@ package tk.duelnode.gameserver.manager.game;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import tk.duelnode.api.API;
-import tk.duelnode.api.game.sent.GameCondition;
-import tk.duelnode.api.game.sent.GlobalGame;
+import tk.duelnode.api.game.data.GameCondition;
+import tk.duelnode.api.game.data.GlobalGame;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.api.util.redis.RedisManager;
 import tk.duelnode.gameserver.GameServer;
@@ -14,7 +14,7 @@ import tk.duelnode.gameserver.manager.dynamic.annotations.Init;
 
 import java.util.regex.Pattern;
 
-@Init(priority = 90,classType = ClassType.CONSTRUCT)
+@Init(priority = 90, classType = ClassType.CONSTRUCT)
 public class GameSubscriber {
 
     public GameSubscriber() {

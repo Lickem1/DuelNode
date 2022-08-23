@@ -5,10 +5,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import tk.duelnode.api.game.sent.GameCondition;
-import tk.duelnode.api.game.sent.GlobalGame;
-import tk.duelnode.api.game.sent.GlobalGamePlayer;
-import tk.duelnode.api.game.sent.GlobalGameType;
+import tk.duelnode.api.game.data.GameCondition;
+import tk.duelnode.api.game.data.GlobalGame;
+import tk.duelnode.api.game.data.GlobalGamePlayer;
+import tk.duelnode.api.game.data.GlobalGameType;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.Plugin;
 import tk.duelnode.lobby.data.player.PlayerData;
@@ -59,11 +59,9 @@ public class QueueManager extends BukkitRunnable {
 
             data.getPlayer().sendMessage(ChatColor.GRAY + "Match found, please allow a few seconds to commence...");
             data2.getPlayer().sendMessage(ChatColor.GRAY + "Match found, please allow a few seconds to commence...");
-            //gD.sendMessage("&cUnable to start match");
 
             gD.message(GameCondition.CREATE, Plugin.getInstance().getRedisManager());
 
-            // todo send to gameserver then send players to that server
             Bukkit.getServer().getScheduler().runTaskLater(Plugin.getInstance(), new Runnable() {
                 @Override
                 public void run() {
@@ -80,7 +78,7 @@ public class QueueManager extends BukkitRunnable {
             if(data != null && data.getCurrent_Queue() != null) {
                 current++;
 
-                if(data.getCurrent_Queue().getQueueTimer() == 59){
+                if(data.getCurrent_Queue().getQueueTimer() == 80){
                     removeFromQueue(data);
                     player.sendMessage(ChatColor.RED + "» " + ChatColor.GRAY + "You have been removed from queue!");
                     data.createLobbyPlayer();

@@ -5,12 +5,14 @@ import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import lombok.Getter;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.api.game.arena.Arena;
 import tk.duelnode.api.game.arena.ArenaState;
 import tk.duelnode.api.game.arena.Cube;
+import tk.duelnode.gameserver.data.game.LocalGame;
 import tk.duelnode.gameserver.manager.dynamic.annotations.Init;
 import tk.duelnode.gameserver.util.WorldEditUtil;
 
@@ -89,6 +91,14 @@ public class ArenaManager {
                 availableArenas.put(arena.getID(), arena);
                 break;
         }
+    }
+
+    public void rollBackArena(LocalGame game) {
+        Bukkit.getServer().getScheduler().runTask(GameServer.getInstance(), () -> {
+            for(Block blocks : game.getBlocksPlaced()) {
+                blocks.setType(Material.AIR);
+            }
+        });
     }
 
     public Arena getFreeArena() {

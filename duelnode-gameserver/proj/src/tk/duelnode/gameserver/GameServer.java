@@ -9,12 +9,15 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import tk.duelnode.api.server.DNServerManager;
 import tk.duelnode.api.util.menu.MenuListener;
 import tk.duelnode.api.util.plasma.Plasma;
 import tk.duelnode.api.util.redis.RedisManager;
+import tk.duelnode.gameserver.data.game.LocalGame;
 import tk.duelnode.gameserver.data.world.chunk.NMSChunk;
 import tk.duelnode.gameserver.manager.DynamicManager;
 import tk.duelnode.gameserver.manager.ScoreboardAdapter;
+import tk.duelnode.gameserver.manager.game.GameManager;
 
 @Getter
 public class GameServer extends JavaPlugin implements PluginMessageListener {
@@ -22,6 +25,7 @@ public class GameServer extends JavaPlugin implements PluginMessageListener {
     @Getter private static GameServer instance;
 
     private RedisManager redisManager;
+    private DNServerManager dnServerManager;
 
     @Override
     public void onEnable() {
@@ -36,6 +40,7 @@ public class GameServer extends JavaPlugin implements PluginMessageListener {
         RedisClient client = RedisClient.create("redis://" + getConfig().getString("redis.auth") + "@" + getConfig().getString("redis.host")+ ":" + getConfig().getInt("redis.port"));
         this.redisManager = new RedisManager(client, getConfig().getString("redis.auth"));
 
+        this.dnServerManager = new DNServerManager(this, redisManager, getConfig().getString("server-location"));
         if(!getDataFolder().exists()) getDataFolder().mkdirs();
 
 
@@ -46,6 +51,10 @@ public class GameServer extends JavaPlugin implements PluginMessageListener {
 
     @Override
     public void onDisable() {
+        for(LocalGame games : DynamicManager.get(GameManager.class).getGameMap().values()) {
+            games.getGlobalGame().delete(games.getID().toString(), redisManager);
+        }
+        dnServerManager.end();
         instance = null;
 
     }

@@ -7,6 +7,7 @@ tk\duelnode\lobby\manager\dynamic\annotations\Init.class
 tk\duelnode\lobby\manager\dynamic\DynamicListener.class
 tk\duelnode\lobby\data\menu\info\UpdateLogMenu.class
 tk\duelnode\lobby\data\world\chunk\AirChunkProvider.class
+tk\duelnode\lobby\data\commands\ListCommand.class
 META-INF\annotations\tk.duelnode.lobby.manager.dynamic.annotations.Init
 tk\duelnode\lobby\data\menu\info\UpdateLogMenu$Update.class
 tk\duelnode\lobby\listener\ConnectionListener.class

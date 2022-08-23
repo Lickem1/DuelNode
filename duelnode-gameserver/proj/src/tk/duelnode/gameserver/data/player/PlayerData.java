@@ -18,6 +18,7 @@ public class PlayerData {
     private Player player;
     private String name;
     private LocalGame game;
+    public int scoreboard_title_tick = 0;
 
     public PlayerData(UUID uuid) {
         this.uuid = uuid;

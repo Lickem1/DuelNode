@@ -13,9 +13,12 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import tk.duelnode.api.server.DNServerData;
+import tk.duelnode.api.server.DNServerManager;
 import tk.duelnode.api.util.menu.MenuListener;
 import tk.duelnode.api.util.plasma.Plasma;
 import tk.duelnode.api.util.redis.RedisManager;
+import tk.duelnode.lobby.data.commands.ListCommand;
 import tk.duelnode.lobby.data.world.chunk.NMSChunk;
 import tk.duelnode.lobby.manager.DynamicManager;
 import tk.duelnode.lobby.manager.ScoreboardAdapter;
@@ -28,6 +31,7 @@ public class Plugin extends JavaPlugin implements PluginMessageListener {
 
     @Getter private static Plugin instance;
     private RedisManager redisManager;
+    private DNServerManager dnServerManager;
 
     private Location spawnLocation;
 
@@ -37,6 +41,7 @@ public class Plugin extends JavaPlugin implements PluginMessageListener {
         new Plasma(this, new ScoreboardAdapter());
         new MenuListener(this);
         DynamicManager.init(this.getClassLoader());
+        getCommand("list").setExecutor(new ListCommand());
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
 
@@ -67,14 +72,24 @@ public class Plugin extends JavaPlugin implements PluginMessageListener {
     }
 
     public void onDisable() {
+        dnServerManager.end();
         instance = null;
     }
 
     public void sendToGameServer(String gameServer, Player player) {
         ByteArrayDataOutput dataOutput = ByteStreams.newDataOutput();
         dataOutput.writeUTF("Connect");
-        dataOutput.writeUTF(gameServer); // todo change this
+        dataOutput.writeUTF(gameServer);
         player.sendPluginMessage(this, "BungeeCord", dataOutput.toByteArray());
+    }
+
+
+    public int getFixedPlayerCount() {
+        int player = 0;
+        for(DNServerData data : DNServerManager.getAllServerData(Plugin.getInstance().getRedisManager())) {
+            if(data.online) player+=data.playerCount;
+        }
+        return player;
     }
 
 

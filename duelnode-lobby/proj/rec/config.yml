@@ -1,3 +1,4 @@
+server-location: "localhost"
 redis:
   host: "localhost"
   auth: "password"

@@ -1,6 +1,7 @@
 package tk.duelnode.gameserver.data.game.impl;
 
 import org.bukkit.Bukkit;
+import tk.duelnode.api.game.data.GlobalGameState;
 import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.gameserver.data.game.LocalGame;
 import tk.duelnode.gameserver.data.game.LocalGameTick;
@@ -12,10 +13,12 @@ public class FinishLogic implements LocalGameTick {
 
     private final GameManager gameManager = DynamicManager.get(GameManager.class);
 
-    private int send_delay = 4;
+    private int send_delay = 3;
     private final int final_duration;
 
-    public FinishLogic(int final_duration) {
+    public FinishLogic(LocalGame game, int final_duration) {
+        game.getGlobalGame().setGameState(GlobalGameState.FINISHED);
+        game.getGlobalGame().post(game.getID().toString(), GameServer.getInstance().getRedisManager());
         this.final_duration = final_duration;
     }
 

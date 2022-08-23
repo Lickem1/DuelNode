@@ -1,9 +1,6 @@
 package tk.duelnode.gameserver.listener;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,7 +13,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import tk.duelnode.api.API;
-import tk.duelnode.api.game.sent.GlobalGame;
+import tk.duelnode.api.game.data.GlobalGame;
 import tk.duelnode.api.util.menu.MenuHolder;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.gameserver.GameServer;
@@ -57,7 +54,7 @@ public class PlayerListener extends DynamicListener {
             }
             else if(globalGame.containsSpectator(data.getUuid())) game.getSpectators().add(data);
 
-        } else System.out.println("null"); // kick player
+        } else System.out.println("null"); // kick player or enter into dev mode
     }
 
     @EventHandler
@@ -98,7 +95,9 @@ public class PlayerListener extends DynamicListener {
         if(e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
             PlayerData data = playerDataManager.getProfile(p);
-            if(data.getGame() != null && data.getGame().isSpectator(data)) e.setCancelled(true);
+            if(data.getGame() != null) {
+                if(data.getGame().isSpectator(data) || (!(data.getGame().getGameTick() instanceof GameLogic))) e.setCancelled(true);
+            }
         }
     }
 
@@ -135,16 +134,22 @@ public class PlayerListener extends DynamicListener {
         data.setName(p.getName());
         e.setJoinMessage(null);
 
-        if(data.getGame() != null && data.getGame().isSpectator(data)) {
-            LocalGame game = data.getGame();
-            game.sendMessage("&b * &f&o" + e.getPlayer().getName() + "&7&o is now spectating your game");
+        if(data.getGame() != null) {
 
-            data.setSpectator();
-            for(PlayerData players : game.getAllPlayers()) {
-                if(players != data) {
-                    players.getPlayer().hidePlayer(GameServer.getInstance(), p);
+            if(data.getGame().isSpectator(data)) {
+                LocalGame game = data.getGame();
+                game.sendMessage("&b * &f&o" + e.getPlayer().getName() + "&7&o is now spectating your game");
+
+                data.setSpectator();
+                for(PlayerData players : game.getAllPlayers()) {
+                    if(players != data) {
+                        players.getPlayer().hidePlayer(GameServer.getInstance(), p);
+                    }
                 }
             }
+        } else {
+            p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7You have been entered into &bDeveloper Mode"));
+            p.setGameMode(GameMode.CREATIVE);
         }
     }
 

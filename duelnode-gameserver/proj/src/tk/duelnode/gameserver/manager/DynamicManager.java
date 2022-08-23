@@ -45,7 +45,6 @@ public class DynamicManager {
             Class<?> newClass = classOb.getClass();
             Init init = clazz.getAnnotation(Init.class);
 
-
             for(ClassType type : init.classType()) {
 
                 if(type == ClassType.PACKET_LISTENER) {
@@ -61,11 +60,7 @@ public class DynamicManager {
                     }
                 }
             }
-
-
-
         }
-
     }
 
     private static <T> T selfConstruct(Class clazz) {

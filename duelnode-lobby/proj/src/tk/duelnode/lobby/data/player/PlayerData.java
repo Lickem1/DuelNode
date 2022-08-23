@@ -21,6 +21,7 @@ public class PlayerData {
     private final UUID UUID;
     private Player player;
     private Queue current_Queue;
+    public int scoreboard_title_tick = 0;
 
     public PlayerData(UUID uuid) {
         this.UUID = uuid;

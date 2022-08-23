@@ -1,10 +1,10 @@
 package tk.duelnode.gameserver.data.game.impl;
 
+import lombok.Getter;
 import tk.duelnode.gameserver.data.game.LocalGame;
 import tk.duelnode.gameserver.data.game.LocalGameTick;
-import tk.duelnode.gameserver.data.game.LocalGameType;
-import tk.duelnode.gameserver.data.player.PlayerData;
 
+@Getter
 public class GameLogic implements LocalGameTick {
 
     private int duration = 0;
@@ -12,18 +12,9 @@ public class GameLogic implements LocalGameTick {
     @Override
     public void doTick(LocalGame game) {
         duration++;
-        LocalGameType gameType = game.getGameType();
-
-        if(gameType == LocalGameType.DUEL) {
-            if(game.getPlayersAlive().size() == 1) {
-                game.setGameTick(new FinishLogic(duration));
-                PlayerData winner = game.getPlayersAlive().get(0);
-                game.sendMessage(winner.getName() + " has won the match!");
-            }
-        }
     }
 
-    public String getGameTime() {
+    public String getFormattedDuration() {
         int ms = duration / 60;
         int ss = duration % 60;
         String m = ((ms < 10) ? "0" : "") + ms;

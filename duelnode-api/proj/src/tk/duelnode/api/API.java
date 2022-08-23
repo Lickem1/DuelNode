@@ -12,4 +12,7 @@ public class API {
 
     @Getter
     private static final PacketInjector packetInjector = new PacketInjector();
+
+    @Getter
+    private static final String version = "2.1.1-beta";
 }

@@ -1,20 +1,20 @@
 package tk.duelnode.gameserver.data.game;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import tk.duelnode.api.game.arena.Arena;
-import tk.duelnode.api.game.sent.GlobalGame;
+import tk.duelnode.api.game.data.GlobalGame;
 import tk.duelnode.gameserver.GameServer;
 import tk.duelnode.gameserver.data.game.impl.FinishLogic;
+import tk.duelnode.gameserver.data.game.impl.GameLogic;
 import tk.duelnode.gameserver.data.game.impl.StartingLogic;
 import tk.duelnode.gameserver.data.player.PlayerData;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -26,15 +26,17 @@ public class LocalGame {
     private final LinkedList<PlayerData> spectators = new LinkedList<>();
     private final LinkedList<PlayerData> playersAlive = new LinkedList<>();
     private final LinkedList<PlayerData> playersDead = new LinkedList<>();
+    private final LinkedList<Block> blocksPlaced = new LinkedList<>();
     private LocalGameTick gameTick;
     private LocalGameType gameType;
     private Arena arena;
     private GlobalGame globalGame;
+    private boolean cancelled = false;
 
     public LocalGame(UUID id) {
         this.ID = id;
         this.gameTick = new StartingLogic();
-        this.gameType = LocalGameType.DUEL; // todo send this over for global usage
+        this.gameType = LocalGameType.DUEL;
     }
 
     public boolean isInGame(PlayerData uuid) {
@@ -87,7 +89,8 @@ public class LocalGame {
     }
 
     public void cancel() {
-        setGameTick(new FinishLogic(0));
+        cancelled = true;
+        gameTick = new FinishLogic(this, 0);
     }
 
     public void handleDeath(PlayerData p) {
@@ -100,11 +103,47 @@ public class LocalGame {
                 spectators.remove(p);
                 return;
             }
+            sendMessage(String.format(DeathMessages.getRandomMessage(), p.getName()));
             playersAlive.remove(p);
             playersDead.add(p);
 
             for(PlayerData data : getAllPlayers()) if(data != p) data.getPlayer().hidePlayer(GameServer.getInstance(), p.getPlayer());
             p.setSpectator();
+
+            // ending code
+            if(checkEnd()) {
+                if(gameType == LocalGameType.DUEL) {
+                    if(gameTick instanceof StartingLogic) setGameTick(new FinishLogic(this, 1)); // since 00:00 = cancelled game, we don't want to cancel the game
+                    else if(gameTick instanceof GameLogic) setGameTick(new FinishLogic(this, ((GameLogic) gameTick).getDuration()));
+
+                    PlayerData winner = playersAlive.get(0);
+                    sendMessage(winner.getName() + " has won the match!");
+                }
+            }
+        }
+    }
+
+    public boolean checkEnd() {
+        if(gameType == LocalGameType.DUEL) {
+            return playersAlive.size() == 1;
+        }
+        return false;
+
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum DeathMessages {
+        DEATH1("&b%s &fdied"),
+        DEATH2("&b%s &fcommitted not feeling so well"),
+        DEATH3("&b%s &fwas sent to the upside down"),
+        DEATH4("&b%s &fjoined the land of the dead"),
+        DEATH5("&b%s &ftook an L");
+
+        private final String message;
+
+        public static String getRandomMessage() {
+            return DeathMessages.values()[new Random().nextInt(values().length)].getMessage();
         }
     }
 }

@@ -6,7 +6,8 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import tk.duelnode.api.game.sent.GlobalGame;
+import tk.duelnode.api.game.data.GlobalGame;
+import tk.duelnode.api.game.data.GlobalGameState;
 import tk.duelnode.api.util.menu.MenuBuilder;
 import tk.duelnode.lobby.Plugin;
 import tk.duelnode.lobby.data.menu.info.InfoMenu;
@@ -26,20 +27,23 @@ public class OngoingMatchMenu {
         List<GlobalGame> globalGameList = GlobalGame.getAllGameData(Plugin.getInstance().getRedisManager());
 
         for (GlobalGame game : globalGameList) {
-            NBTTagCompound gameID = new NBTTagCompound();
-            gameID.setString("game-id", game.getGameID().toString());
+            if(game.getGameState() != GlobalGameState.FINISHED) {
+                NBTTagCompound gameID = new NBTTagCompound();
+                gameID.setString("game-id", game.getGameID().toString());
 
-            ItemBuilder item = new ItemBuilder(Material.WOOD, 1, 0).setName("&b" + game.getTeam1().get(0).getName() + " &7vs &b" + game.getTeam2().get(0).getName());
-            item.setLore(
-                    "&fLocation:&7 " + game.getGameServer(),
-                    "&fArena: &7" + game.getArenaID(),
-                    "&fSpectators:&7 " + game.getSpectators().size(),
-                    "",
-                    " &b* &fClick to spectate game!"
-            );
+                ItemBuilder item = new ItemBuilder(Material.IRON_SWORD, 1, 0).setName("&b" + game.getTeam1().get(0).getName() + " &7vs &b" + game.getTeam2().get(0).getName());
+                item.setLore(
+                        "&fLocation:&7 " + game.getGameServerLocation(),
+                        "&fArena: &7" + game.getArenaID(),
+                        "&fSpectators:&7 " + game.getSpectators().size(),
+                        "&fStatus:&7 " + game.getGameState().getFormattedString(),
+                        "",
+                        " &b* &fClick to spectate game!"
+                );
 
-            item.addTag(gameID);
-            items.add(item.build());
+                item.addTag(gameID);
+                items.add(item.build());
+            }
         }
 
         MenuBuilder menu = new MenuBuilder(54, "Ongoing Matches #1");
@@ -73,6 +77,7 @@ public class OngoingMatchMenu {
                             " &b* &fMiddle click to travel to the first page!"
                     ).build();
             ItemStack noMorePages = new ItemBuilder(Material.BARRIER, 1, 0).setName("&cNo more pages").build();
+            ItemStack refreshMenu = new ItemBuilder(Material.HOPPER, 1, 0).setName("&bRefresh Games").build();
             ItemStack backToMain = new ItemBuilder(Material.FEATHER, 1, 0).setName("&cBack").build();
 
             if (currentIndex != menus.size()) m.set(41, nextPage, ((player, type, slot) -> {
@@ -90,6 +95,9 @@ public class OngoingMatchMenu {
             else m.set(39, noMorePages, ((player, type, slot) -> player.sendMessage("§cNo more pages")));
 
             m.set(49, backToMain, ((player, type, slot) -> DynamicManager.get(InfoMenu.class).open(player)));
+            m.set(40, refreshMenu, ((player, type, slot) -> {
+                if(!DynamicManager.get(InfoMenu.class).openOngoingMenu(player)) player.closeInventory();
+            }));
         }
 
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BELL, 1F, 1f);
@@ -98,7 +106,7 @@ public class OngoingMatchMenu {
 
     private void fillGlass(MenuBuilder b) {
         int[] slots = {
-                0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,37,38,40,42,43,44,45,46,47,48,50,51,52,53
+                0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,37,38,42,43,44,45,46,47,48,50,51,52,53
         };
         for(int g : slots) {
             b.set(g, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 15).setName(" ").build(), null);
