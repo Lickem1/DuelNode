@@ -10,6 +10,7 @@ import tk.duelnode.api.game.data.GlobalGame;
 import tk.duelnode.api.game.data.GlobalGameState;
 import tk.duelnode.api.server.DNServerData;
 import tk.duelnode.api.server.DNServerManager;
+import tk.duelnode.api.server.EnumServerType;
 import tk.duelnode.api.util.menu.MenuBuilder;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.Plugin;
@@ -91,7 +92,7 @@ public class InfoMenu extends BukkitRunnable {
 
     private int fixedServerAmount() {
         List<DNServerData> servers = DNServerManager.getAllServerData(Plugin.getInstance().getRedisManager());
-        servers.removeIf(server -> !server.online);
+        servers.removeIf(server -> !server.online || server.serverType != EnumServerType.DUEL_SERVER);
         return servers.size();
     }
 

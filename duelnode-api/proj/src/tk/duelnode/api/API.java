@@ -14,5 +14,5 @@ public class API {
     private static final PacketInjector packetInjector = new PacketInjector();
 
     @Getter
-    private static final String version = "2.1.1-beta";
+    private static final String version = "2.1.2-beta";
 }

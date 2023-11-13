@@ -27,7 +27,7 @@ public class DNServerManager {
     private final DNServerData currentServer = new DNServerData();
     private final Gson gson = new GsonBuilder().create();
 
-    public DNServerManager(Plugin plugin, RedisManager manager, String serverLocation) {
+    public DNServerManager(Plugin plugin, RedisManager manager, String serverLocation, EnumServerType serverType) {
 
         currentServer.online = true;
         redis = manager;
@@ -39,6 +39,7 @@ public class DNServerManager {
             currentServer.serverPort = Bukkit.getServer().getPort();
             currentServer.serverName = Bukkit.getServerName();
             currentServer.serverLocation = serverLocation;
+            currentServer.serverType = serverType;
 
             new BukkitRunnable() {
                 @Override

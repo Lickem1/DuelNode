@@ -1,5 +1,10 @@
 package tk.duelnode.gameserver.listener;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,10 +25,22 @@ public class ChatListener extends DynamicListener {
     public void chat(AsyncPlayerChatEvent e) {
         Player p = e.getPlayer();
         ArenaManager arenaManager = DynamicManager.get(ArenaManager.class);
-        String format = ChatColor.GRAY + "[%s"+ ChatColor.GRAY + "] %s" + p.getName() + ChatColor.GRAY + ": " + ChatColor.WHITE + e.getMessage();
+        net.md_5.bungee.api.ChatColor gray = net.md_5.bungee.api.ChatColor.GRAY;
+        String format = gray + "[" + "%s" + gray + "]%s " + p.getName() + gray + ": ";
 
-        if(p.getName().equalsIgnoreCase("Lickem")) format = String.format(format, ChatColor.DARK_AQUA + "Dev", ChatColor.AQUA);
-        else format = String.format(format, ChatColor.WHITE + "Member", ChatColor.GRAY.toString() + ChatColor.ITALIC);
+        if(p.getName().equalsIgnoreCase("Lickem")) format = String.format(format, net.md_5.bungee.api.ChatColor.DARK_AQUA + "Dev", net.md_5.bungee.api.ChatColor.AQUA);
+        else format = String.format(format, net.md_5.bungee.api.ChatColor.WHITE + "Member", net.md_5.bungee.api.ChatColor.GRAY.toString() + net.md_5.bungee.api.ChatColor.ITALIC);
+
+        ComponentBuilder rank = new ComponentBuilder(format);
+        rank.event(new HoverEvent(
+                HoverEvent.Action.SHOW_TEXT,
+                TextComponent.fromLegacyText(ChatColor.GRAY + "Click to view " + ChatColor.AQUA + p.getName() + "'s" + ChatColor.GRAY + " profile!")
+        ));
+        rank.event(new ClickEvent(
+                ClickEvent.Action.RUN_COMMAND,
+                "/profile " + p.getName()
+        ));
+        rank.append(e.getMessage(), ComponentBuilder.FormatRetention.NONE);
 
 
         if(e.getMessage().equalsIgnoreCase("paste")) {
@@ -37,7 +54,7 @@ public class ChatListener extends DynamicListener {
             DynamicManager.get(GameServerMenu.class).open(p);
         } else {
             e.setCancelled(true);
-            GameServer.getInstance().getRedisManager().publish("dn/server/gameserver-chat", format);
+            GameServer.getInstance().getRedisManager().publish("dn/server/gameserver-chat", ComponentSerializer.toString(rank.create()));
         }
     }
 }

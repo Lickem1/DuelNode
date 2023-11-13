@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import tk.duelnode.api.server.DNServerManager;
+import tk.duelnode.api.server.EnumServerType;
 import tk.duelnode.api.util.menu.MenuListener;
 import tk.duelnode.api.util.plasma.Plasma;
 import tk.duelnode.api.util.redis.RedisManager;
@@ -40,7 +41,7 @@ public class GameServer extends JavaPlugin implements PluginMessageListener {
         RedisClient client = RedisClient.create("redis://" + getConfig().getString("redis.auth") + "@" + getConfig().getString("redis.host")+ ":" + getConfig().getInt("redis.port"));
         this.redisManager = new RedisManager(client, getConfig().getString("redis.auth"));
 
-        this.dnServerManager = new DNServerManager(this, redisManager, getConfig().getString("server-location"));
+        this.dnServerManager = new DNServerManager(this, redisManager, getConfig().getString("server-location"), EnumServerType.DUEL_SERVER);
         if(!getDataFolder().exists()) getDataFolder().mkdirs();
 
 

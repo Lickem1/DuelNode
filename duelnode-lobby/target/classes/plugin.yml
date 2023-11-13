@@ -2,5 +2,8 @@ name: DuelNode-Lobby
 author: Lickem
 version: 1.0.0
 main: tk.duelnode.lobby.Plugin
+softdepend:
+  - HolographicDisplays
 commands:
   list:
+    description: View online players

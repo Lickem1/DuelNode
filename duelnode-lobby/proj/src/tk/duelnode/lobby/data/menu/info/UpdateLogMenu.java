@@ -196,6 +196,16 @@ public class UpdateLogMenu {
                 "&7Implemented cross-server ongoing match viewer! (Look inside the book :D)",
                 "&7Implemented cross-server spectator functionality!! This one was kinda tricky but did it no problem!",
                 "&7Again, not sure if I'm gonna add to this anymore as it's only for shits and giggles but oh well, here ya go!"
+        }),
+
+        LOG_12("Log #12", "Aug 22, 2022 @ 10:25PM EST", "2.1.1-beta",new String[]{
+                "&bCommit ID:&f 2602402761edf9a28863f071ee6c7fc07848bda1",
+                "&7 ",
+                "&7Project is pretty much done!",
+                "&7Added building inside of duels w/ Arena rollback system!!",
+                "&7Implemented a redis server cache system & a new menu to navigate through them!",
+                "&7Still needs to be tested on a major scale but the system is pretty much set and stone",
+                "&7Done some cool little cosmetic changes (mainly color.. etc..)"
         });
 
 

@@ -18,6 +18,7 @@ tk\duelnode\api\game\arena\Cube.class
 tk\duelnode\api\util\plasma\PlasmaAdapter.class
 tk\duelnode\api\util\packet\PacketEventReference.class
 tk\duelnode\api\util\plasma\PlasmaListener.class
+tk\duelnode\api\server\EnumServerType.class
 tk\duelnode\api\util\packet\PacketInjector.class
 tk\duelnode\api\util\redis\Message.class
 tk\duelnode\api\util\redis\RedisListener.class

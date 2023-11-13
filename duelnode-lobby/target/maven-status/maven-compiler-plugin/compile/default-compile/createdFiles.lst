@@ -12,12 +12,16 @@ META-INF\annotations\tk.duelnode.lobby.manager.dynamic.annotations.Init
 tk\duelnode\lobby\data\menu\info\UpdateLogMenu$Update.class
 tk\duelnode\lobby\listener\ConnectionListener.class
 tk\duelnode\lobby\data\player\PlayerData.class
+tk\duelnode\lobby\listener\PlayerChatListener.class
 tk\duelnode\lobby\data\menu\GameServerMenu.class
 tk\duelnode\lobby\data\menu\OngoingMatchMenu.class
 tk\duelnode\lobby\data\queue\QueueManager.class
 tk\duelnode\lobby\util\WorldEditUtil.class
+tk\duelnode\lobby\data\npc\INPCEvent.class
+tk\duelnode\lobby\data\npc\NPCPacketListener.class
 tk\duelnode\lobby\listener\PlayerListener.class
 tk\duelnode\lobby\manager\ScoreboardAdapter.class
+tk\duelnode\lobby\data\npc\NPC.class
 tk\duelnode\lobby\listener\EnvironmentListener.class
 tk\duelnode\lobby\util\itembuilder\ItemEvent.class
 tk\duelnode\lobby\data\queue\Queue.class
@@ -27,3 +31,4 @@ tk\duelnode\lobby\manager\DynamicManager.class
 tk\duelnode\lobby\data\world\chunk\NMSChunk.class
 tk\duelnode\lobby\data\world\WorldListener.class
 tk\duelnode\lobby\listener\PlayerListener$1.class
+tk\duelnode\lobby\manager\NPCManager.class

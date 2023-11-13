@@ -7,8 +7,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import tk.duelnode.api.API;
 import tk.duelnode.api.util.packet.ClassType;
 import tk.duelnode.lobby.Plugin;
+import tk.duelnode.lobby.data.npc.NPC;
 import tk.duelnode.lobby.data.player.PlayerData;
 import tk.duelnode.lobby.manager.DynamicManager;
+import tk.duelnode.lobby.manager.NPCManager;
 import tk.duelnode.lobby.manager.PlayerDataManager;
 import tk.duelnode.lobby.manager.dynamic.DynamicListener;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
@@ -28,7 +30,9 @@ public class ConnectionListener extends DynamicListener {
         p.teleport(Plugin.getInstance().getSpawnLocation());
         data.createLobbyPlayer();
 
-        p.sendTitle(ChatColor.AQUA + "Node-Lobby " + ChatColor.GRAY + "(ALPHA)", ChatColor.GRAY + "Contact Lickem for bugs");
+        p.sendTitle(ChatColor.AQUA + "Node-Lobby " + ChatColor.GRAY + "(BETA)", ChatColor.GRAY + "Contact Lickem for bugs");
+
+        data.handleNPC();
 
     }
 }

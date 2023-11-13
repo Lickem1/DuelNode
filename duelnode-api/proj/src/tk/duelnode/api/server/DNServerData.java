@@ -7,6 +7,7 @@ public class DNServerData {
     public int playerCount, maxPlayers, serverPort;
     public String serverName, externalIP, serverLocation;
     public boolean online, whitelisted;
+    public EnumServerType serverType;
     public List<String> onlinePlayers;
 
 }

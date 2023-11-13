@@ -1,6 +1,11 @@
 package tk.duelnode.lobby.listener;
 
+import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.chat.ComponentSerializer;
+import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -14,6 +19,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
+import tk.duelnode.api.API;
 import tk.duelnode.api.game.data.*;
 import tk.duelnode.api.util.menu.MenuHolder;
 import tk.duelnode.api.util.packet.ClassType;
@@ -25,6 +31,7 @@ import tk.duelnode.lobby.manager.DynamicManager;
 import tk.duelnode.lobby.manager.PlayerDataManager;
 import tk.duelnode.lobby.manager.dynamic.DynamicListener;
 import tk.duelnode.lobby.manager.dynamic.annotations.Init;
+import tk.duelnode.lobby.data.npc.NPC;
 
 import java.util.*;
 
@@ -100,30 +107,6 @@ public class PlayerListener extends DynamicListener {
             default: break;
         }
 
-    }
-
-    @EventHandler
-    public void chat(AsyncPlayerChatEvent e) {
-        Player p = e.getPlayer();
-        e.setCancelled(true);
-        String format = ChatColor.GRAY + "[%s"+ ChatColor.GRAY + "] %s" + p.getName() + ChatColor.GRAY + ": " + ChatColor.WHITE + e.getMessage();
-
-        if(p.getName().equalsIgnoreCase("Lickem")) format = String.format(format, ChatColor.DARK_AQUA + "Dev", ChatColor.AQUA);
-        else format = String.format(format, ChatColor.WHITE + "Member", ChatColor.GRAY.toString() + ChatColor.ITALIC);
-
-        if(e.getMessage().equalsIgnoreCase("test_games")) {
-
-            for(int i = 0; i < 10; i++) {
-                GlobalGame gD = new GlobalGame(GlobalGameType.DUEL);
-                gD.setGameServer("na-mini-01");
-                gD.addTeam1(new GlobalGamePlayer("Player" + new Random().nextInt(2000), UUID.randomUUID()));
-                gD.addTeam2(new GlobalGamePlayer("Player" + new Random().nextInt(2000), UUID.randomUUID()));
-
-                gD.message(GameCondition.CREATE, Plugin.getInstance().getRedisManager());
-            }
-            p.sendMessage(ChatColor.GRAY + "Creating fake duels");
-
-        } else Plugin.getInstance().getRedisManager().publish("dn/server/gameserver-chat", format);
     }
 
     @EventHandler

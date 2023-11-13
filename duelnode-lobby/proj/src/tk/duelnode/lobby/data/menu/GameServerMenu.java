@@ -10,6 +10,7 @@ import tk.duelnode.api.game.data.GlobalGame;
 import tk.duelnode.api.game.data.GlobalGameState;
 import tk.duelnode.api.server.DNServerData;
 import tk.duelnode.api.server.DNServerManager;
+import tk.duelnode.api.server.EnumServerType;
 import tk.duelnode.api.util.menu.MenuBuilder;
 import tk.duelnode.lobby.Plugin;
 import tk.duelnode.lobby.data.menu.info.InfoMenu;
@@ -30,7 +31,7 @@ public class GameServerMenu {
         List<DNServerData> serverDataList = DNServerManager.getAllServerData(Plugin.getInstance().getRedisManager());
 
         for (DNServerData server : serverDataList) {
-            if(server.online) {
+            if(server.online && server.serverType == EnumServerType.DUEL_SERVER) {
                 NBTTagCompound gameID = new NBTTagCompound();
                 gameID.setString("server-id", server.serverName);
                 String formattedPlayers = server.onlinePlayers.toString().replaceAll(Pattern.quote("["), "").replaceAll(Pattern.quote("]"), "");

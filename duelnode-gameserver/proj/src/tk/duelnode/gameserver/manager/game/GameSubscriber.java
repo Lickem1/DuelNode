@@ -1,5 +1,6 @@
 package tk.duelnode.gameserver.manager.game;
 
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import tk.duelnode.api.API;
@@ -40,7 +41,7 @@ public class GameSubscriber {
         }));
 
         redis.subscribe("dn/server/gameserver-chat", ((channel, message) -> {
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));
+            Bukkit.broadcast(ComponentSerializer.parse(message));
 
         }));
 

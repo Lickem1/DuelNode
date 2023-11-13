@@ -25,25 +25,25 @@ public class ScoreboardAdapter implements PlasmaAdapter {
 
         String newTitle = "";
 
-        if (data.scoreboard_title_tick >= 9 * 5) {
+        if (data.scoreboard_title_tick >= 9) {
             data.scoreboard_title_tick = 0;
             newTitle = "%s%s%sNODE &7(Lobby)";
 
-        } else if (data.scoreboard_title_tick <= 5) {
+        } else if (data.scoreboard_title_tick <= 1) {
             newTitle = "%s%sN%sODE &7(Lobby)";
-        } else if (data.scoreboard_title_tick <= 2 * 5) {
+        } else if (data.scoreboard_title_tick <= 2) {
             newTitle = "%sN%sO%sDE &7(Lobby)";
-        } else if (data.scoreboard_title_tick <= 3 * 5) {
+        } else if (data.scoreboard_title_tick <= 3) {
             newTitle = "%sNO%sD%sE &7(Lobby)";
-        } else if (data.scoreboard_title_tick <= 4 * 5) {
+        } else if (data.scoreboard_title_tick <= 4) {
             newTitle = "%sNOD%sE%s &7(Lobby)";
-        } else if (data.scoreboard_title_tick <= 5 * 5) {
+        } else if (data.scoreboard_title_tick <= 5) {
             newTitle = "&b&lNODE &7(Lobby)";
-        } else if (data.scoreboard_title_tick <= 6 * 5) {
+        } else if (data.scoreboard_title_tick <= 6) {
             newTitle = "&f&lNODE &7(Lobby)";
-        } else if (data.scoreboard_title_tick <= 7 * 5) {
+        } else if (data.scoreboard_title_tick <= 7) {
             newTitle = "&b&lNODE &7(Lobby)";
-        } else if (data.scoreboard_title_tick <= 8 * 5) {
+        } else if (data.scoreboard_title_tick <= 8) {
             newTitle = "%s%s%sNODE &7(Lobby)";
         } else {
             newTitle = "%s%s%sNODE &7(Lobby)";
